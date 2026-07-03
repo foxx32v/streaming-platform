@@ -1,0 +1,75 @@
+# Создаем .gitignore
+echo "# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.nuxt/
+.cache/
+
+# Testing
+coverage/
+.nyc_output/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Uploads
+uploads/
+public/uploads/
+media/
+
+# Temporary files
+tmp/
+temp/
+
+# Docker
+*.pid
+*.seed
+*.pid.lock
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Misc
+*.pem
+*.key
+*.crt
+*.p12
+
+# Redis
+dump.rdb
+
+# Expo
+.expo/
+dist-expo/
+
+# Mobile specific
+mobile/ios/Pods/
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/build/" > .gitignore
