@@ -1,68 +1,73 @@
-echo "# 🎬 Streaming Platform
+## Streaming Platform
 
 Full-stack streaming platform with microservices architecture.
 
-## 🏗️ Architecture
 
-\`\`\`
+Project Structure
+-----------------
+
 streaming-platform/
-├── server/           # NestJS microservices
-├── client/           # Next.js web application
-└── mobile/           # React Native mobile app
-\`\`\`
+├── server/         NestJS backend
+├── client/         Next.js frontend
+└── mobile/         React Native app
 
-## 🚀 Technologies
 
-### Backend (Server)
-- NestJS 11
-- PostgreSQL + TypeORM
-- Redis
-- JWT Authentication
-- Microservices
+Technology Stack
+----------------
 
-### Web Client
-- Next.js 16
-- TypeScript
-- Tailwind CSS 4
-- Zustand + React Query
+Backend (Server)
+  - NestJS 11
+  - PostgreSQL + TypeORM
+  - Redis
+  - JWT Authentication
+  - Microservices
 
-### Mobile Client
-- React Native 0.86
-- Expo 57
-- React Navigation
+Web Client
+  - Next.js 16
+  - TypeScript
+  - Tailwind CSS 4
+  - Zustand + React Query
 
-## 📦 Installation
+Mobile Client
+  - React Native 0.86
+  - Expo 57
+  - React Navigation
 
-\`\`\`bash
-# Backend
-cd server
-npm install
-cp .env.example .env
-npm run start:dev
 
-# Web Client
-cd client
-npm install
-cp .env.local.example .env.local
-npm run dev
+Installation
+------------
 
-# Mobile Client
-cd mobile
-npm install
-npm run ios # or android
-\`\`\`
+Backend
+  cd server
+  npm install
+  cp .env.example .env
+  npm run start:dev
 
-## 🎯 Features
+Web Client
+  cd client
+  npm install
+  cp .env.local.example .env.local
+  npm run dev
 
-- ✅ Video upload & streaming
-- ✅ Playlists management
-- ✅ Subscription system
-- ✅ AI recommendations
-- ✅ User authentication
-- ✅ View history
-- ✅ Real-time analytics
+Mobile Client
+  cd mobile
+  npm install
+  npm run ios
 
-## 📝 License
+
+Features
+--------
+
+- Video upload and streaming
+- Playlists management
+- Subscription system
+- AI recommendations
+- User authentication
+- View history
+- Real-time analytics
+
+
+License
+-------
 
 MIT
-" > README.md
