@@ -10,13 +10,13 @@
   "monorepo": true,
   "root": "apps/server",
   "projects": {
-    "analytics-service": {
+    "analytics": {
       "type": "application",
-      "root": "apps/analytics-service",
+      "root": "apps/analytics",
       "entryFile": "main",
-      "sourceRoot": "apps/analytics-service/src",
+      "sourceRoot": "apps/analytics/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/analytics-service/tsconfig.app.json"
+        "tsConfigPath": "apps/analytics/tsconfig.app.json"
       }
     },
     "api-gateway": {
@@ -28,67 +28,67 @@
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
       }
     },
-    "auth-service": {
+    "auth": {
       "type": "application",
-      "root": "apps/auth-service",
+      "root": "apps/auth",
       "entryFile": "main",
-      "sourceRoot": "apps/auth-service/src",
+      "sourceRoot": "apps/auth/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/auth-service/tsconfig.app.json"
+        "tsConfigPath": "apps/auth/tsconfig.app.json"
       }
     },
-    "chat-service": {
+    "chat": {
       "type": "application",
-      "root": "apps/chat-service",
+      "root": "apps/chat",
       "entryFile": "main",
-      "sourceRoot": "apps/chat-service/src",
+      "sourceRoot": "apps/chat/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/chat-service/tsconfig.app.json"
+        "tsConfigPath": "apps/chat/tsconfig.app.json"
       }
     },
-    "donation-service": {
+    "donation": {
       "type": "application",
-      "root": "apps/donation-service",
+      "root": "apps/donation",
       "entryFile": "main",
-      "sourceRoot": "apps/donation-service/src",
+      "sourceRoot": "apps/donation/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/donation-service/tsconfig.app.json"
+        "tsConfigPath": "apps/donation/tsconfig.app.json"
       }
     },
-    "moderation-service": {
+    "moderation": {
       "type": "application",
-      "root": "apps/moderation-service",
+      "root": "apps/moderation",
       "entryFile": "main",
-      "sourceRoot": "apps/moderation-service/src",
+      "sourceRoot": "apps/moderation/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/moderation-service/tsconfig.app.json"
+        "tsConfigPath": "apps/moderation/tsconfig.app.json"
       }
     },
-    "notification-service": {
+    "notification": {
       "type": "application",
-      "root": "apps/notification-service",
+      "root": "apps/notification",
       "entryFile": "main",
-      "sourceRoot": "apps/notification-service/src",
+      "sourceRoot": "apps/notification/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/notification-service/tsconfig.app.json"
+        "tsConfigPath": "apps/notification/tsconfig.app.json"
       }
     },
-    "recommendation-service": {
+    "recommendation": {
       "type": "application",
-      "root": "apps/recommendation-service",
+      "root": "apps/recommendation",
       "entryFile": "main",
-      "sourceRoot": "apps/recommendation-service/src",
+      "sourceRoot": "apps/recommendation/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/recommendation-service/tsconfig.app.json"
+        "tsConfigPath": "apps/recommendation/tsconfig.app.json"
       }
     },
-    "search-service": {
+    "search": {
       "type": "application",
-      "root": "apps/search-service",
+      "root": "apps/search",
       "entryFile": "main",
-      "sourceRoot": "apps/search-service/src",
+      "sourceRoot": "apps/search/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/search-service/tsconfig.app.json"
+        "tsConfigPath": "apps/search/tsconfig.app.json"
       }
     },
     "server": {
@@ -100,13 +100,13 @@
         "tsConfigPath": "apps/server/tsconfig.app.json"
       }
     },
-    "stream-service": {
+    "stream": {
       "type": "application",
-      "root": "apps/stream-service",
+      "root": "apps/stream",
       "entryFile": "main",
-      "sourceRoot": "apps/stream-service/src",
+      "sourceRoot": "apps/stream/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/stream-service/tsconfig.app.json"
+        "tsConfigPath": "apps/stream/tsconfig.app.json"
       }
     },
     "transcoding-worker": {
@@ -118,31 +118,31 @@
         "tsConfigPath": "apps/transcoding-worker/tsconfig.app.json"
       }
     },
-    "upload-service": {
+    "upload": {
       "type": "application",
-      "root": "apps/upload-service",
+      "root": "apps/upload",
       "entryFile": "main",
-      "sourceRoot": "apps/upload-service/src",
+      "sourceRoot": "apps/upload/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/upload-service/tsconfig.app.json"
+        "tsConfigPath": "apps/upload/tsconfig.app.json"
       }
     },
-    "user-service": {
+    "user": {
       "type": "application",
-      "root": "apps/user-service",
+      "root": "apps/user",
       "entryFile": "main",
-      "sourceRoot": "apps/user-service/src",
+      "sourceRoot": "apps/user/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/user-service/tsconfig.app.json"
+        "tsConfigPath": "apps/user/tsconfig.app.json"
       }
     },
-    "video-service": {
+    "video": {
       "type": "application",
-      "root": "apps/video-service",
+      "root": "apps/video",
       "entryFile": "main",
-      "sourceRoot": "apps/video-service/src",
+      "sourceRoot": "apps/video/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/video-service/tsconfig.app.json"
+        "tsConfigPath": "apps/video/tsconfig.app.json"
       }
     }
   }
