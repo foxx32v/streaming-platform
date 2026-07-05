@@ -5,9 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
-  ],
-})
+    isGlobal: true,
+    envFilePath: '.env',
+})]})
 export class AppModule {}
