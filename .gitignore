@@ -1,19 +1,16 @@
-# Создаем .gitignore
-echo "# Node
+# Node
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# Environment variables
-.env
-.env.local
-.env.development
-.env.production
-.env.test
+# Environment
+*.env
+.env.*
+!.env.example
 
-# Build outputs
+# Build
 dist/
 build/
 .next/
@@ -42,7 +39,7 @@ uploads/
 public/uploads/
 media/
 
-# Temporary files
+# Temp
 tmp/
 temp/
 
@@ -51,11 +48,11 @@ temp/
 *.seed
 *.pid.lock
 
-# OS files
+# OS
 Thumbs.db
 Desktop.ini
 
-# Misc
+# Certs
 *.pem
 *.key
 *.crt
@@ -68,8 +65,8 @@ dump.rdb
 .expo/
 dist-expo/
 
-# Mobile specific
+# Mobile
 mobile/ios/Pods/
 mobile/android/.gradle/
 mobile/android/app/build/
-mobile/android/build/" > .gitignore
+mobile/android/build/
