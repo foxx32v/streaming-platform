@@ -1,6 +1,6 @@
 import { IsDateString, IsEmail, IsNotEmpty } from "class-validator";
-import { IsPassword } from "../decorators/password.decorator";
-import { IsUserName } from "../decorators/userName.decorator";
+import { IsPassword } from "../../decorators/password.decorator";
+import { IsUserName } from "../../decorators/userName.decorator";
 
 export class RegisterDto {
     @IsEmail()

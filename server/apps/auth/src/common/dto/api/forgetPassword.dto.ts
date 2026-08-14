@@ -1,4 +1,4 @@
-import { IsPassword } from "../decorators/password.decorator";
+import { IsPassword } from "../../decorators/password.decorator";
 
 export class ForgetPasswordDto {
     @IsPassword()

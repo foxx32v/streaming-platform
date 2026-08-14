@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RegisterDto, LoginDto, RefreshDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto, VerifyEmailDto } from './common/dto';
+import { RegisterDto, LoginDto, RefreshDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto, VerifyEmailDto } from './common/dto/api';
 
 @Injectable()
 export class AuthService {
@@ -75,7 +75,7 @@ export class AuthService {
     return { message: 'Change user role endpoint', id, role };
   }
 
-  blockUser(id: string) {
+  blockUser(id: string, reason) {
     return { message: 'Block user endpoint', id };
   }
 

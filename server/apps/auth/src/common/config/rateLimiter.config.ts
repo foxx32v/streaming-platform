@@ -15,3 +15,9 @@ export const LOGIN_LIMITER = {
     TIMEOUT : 30 * 1000 * 60,
     MESSAGE : 'Login limit exceeded. Please try again later.'
 }
+
+export const ADMIN_LIMITER = {
+    COUNT : 50,
+    TIMEOUT : 10 * 1000 * 60,
+    MESSAGE : 'Error limit.'
+}
