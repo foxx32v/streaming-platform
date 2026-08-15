@@ -1,105 +1,119 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { RegisterDto, LoginDto, RefreshDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto, VerifyEmailDto } from './common/dto/api';
-
+import userRepository from './common/repository/user.repository';
+import * as crypto from 'crypto';
+import { GetRandomColor } from './common/helper/methods/colorMethods.helper';
+import { Responser } from './common/helper/utils/responser.util';
+import { mailer } from './common/helper/utils/mailer/mailer.util';
+import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
-  register(dto: RegisterDto, ip: string) {
-    return { message: 'Register endpoint' };
+  async register(dto: RegisterDto, ip: string) {
+    const isUserByEmail = await userRepository.ExistsByEmail(dto.email)
+    if (isUserByEmail) throw new HttpException('Email already exists', 409)
+    const isUserByUserName = await userRepository.ExistsByUserName(dto.userName)
+    if (isUserByUserName) throw new HttpException('Username already exists', 409)
+    const linkActivation = crypto.randomUUID()
+    const passwordHash = await bcrypt.hash(dto.password, 10)
+    const avatarColor = GetRandomColor()
+    await userRepository.CreateUser(dto.email, passwordHash, dto.userName, linkActivation, avatarColor)
+    //await mailer.sendVerificationEmail(dto.email, linkActivation)
+    return Responser(201, 'User registered successfully', { email: dto.email })
   }
 
-  login(dto: LoginDto, ip: string, userAgent: string) {
+  async login(dto: LoginDto, ip: string, userAgent: string) {
     return { message: 'Login endpoint' };
   }
 
-  logout(userId: string) {
+  async logout(userId: string) {
     return { message: 'Logout endpoint' };
   }
 
-  refresh(dto: RefreshDto, ip: string) {
+  async refresh(dto: RefreshDto, ip: string) {
     return { message: 'Refresh endpoint' };
   }
 
-  verifyEmail(dto: VerifyEmailDto) {
+  async verifyEmail(dto: VerifyEmailDto) {
     return { message: 'Verify email endpoint' };
   }
 
-  resendVerification(email: string) {
+  async resendVerification(email: string) {
     return { message: 'Resend verification endpoint' };
   }
 
-  forgetPassword(dto: ForgetPasswordDto) {
+  async forgetPassword(dto: ForgetPasswordDto) {
     return { message: 'Forgot password endpoint' };
   }
 
-  resetPassword(dto: ResetPasswordDto) {
+  async resetPassword(dto: ResetPasswordDto) {
     return { message: 'Reset password endpoint' };
   }
 
-  changePassword(dto: ChangePasswordDto, userId: string) {
+  async changePassword(dto: ChangePasswordDto, userId: string) {
     return { message: 'Change password endpoint' };
   }
 
-  googleLogin() {
+  async googleLogin() {
     return { message: 'Google login endpoint' };
   }
 
-  googleCallback(code: string) {
+  async googleCallback(code: string) {
     return { message: 'Google callback endpoint' };
   }
 
-  githubLogin() {
+  async githubLogin() {
     return { message: 'GitHub login endpoint' };
   }
 
-  githubCallback(code: string) {
+  async githubCallback(code: string) {
     return { message: 'GitHub callback endpoint' };
   }
 
-  vkLogin() {
+  async vkLogin() {
     return { message: 'VK login endpoint' };
   }
 
-  vkCallback(code: string) {
+  async vkCallback(code: string) {
     return { message: 'VK callback endpoint' };
   }
 
-  getAllUsers(page: number, limit: number) {
+  async getAllUsers(page: number, limit: number) {
     return { message: 'Get all users endpoint', page, limit };
   }
 
-  getUserById(id: string) {
+  async getUserById(id: string) {
     return { message: 'Get user by ID endpoint', id };
   }
 
-  changeUserRole(id: string, role: string) {
+  async changeUserRole(id: string, role: string) {
     return { message: 'Change user role endpoint', id, role };
   }
 
-  blockUser(id: string, reason) {
+  async blockUser(id: string, reason) {
     return { message: 'Block user endpoint', id };
   }
 
-  unblockUser(id: string) {
+  async unblockUser(id: string) {
     return { message: 'Unblock user endpoint', id };
   }
 
-  getSessions(userId: string) {
+  async getSessions(userId: string) {
     return { message: 'Get sessions endpoint', userId };
   }
 
-  revokeSession(sessionId: string) {
+  async revokeSession(sessionId: string) {
     return { message: 'Revoke session endpoint', sessionId };
   }
 
-  revokeAllSessions(userId: string) {
+  async revokeAllSessions(userId: string) {
     return { message: 'Revoke all sessions endpoint', userId };
   }
 
-  verifyToken(token: string) {
+  async verifyToken(token: string) {
     return { message: 'Verify token endpoint' };
   }
 
-  validateToken(token: string) {
+  async validateToken(token: string) {
     return { message: 'Validate token endpoint' };
   }
 }

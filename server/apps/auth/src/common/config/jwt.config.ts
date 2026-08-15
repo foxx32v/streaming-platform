@@ -1,4 +1,4 @@
-require('dotenv').config({path: `config`})
+require('dotenv').config({path: './apps/auth/.env' })
 
 export const REFRESH_TOKEN = {
     SECRET : process.env.REFRESH_SECRET,
