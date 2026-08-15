@@ -1,6 +1,6 @@
 import { applyDecorators } from "@nestjs/common";
 import { MinLength, MaxLength, Matches, IsString } from "class-validator";
-import { USERNAME_DECORATOR } from "../config/decorator.config";
+import { USERNAME_DECORATOR } from "../config/helper/decorator.config";
 
 export function IsUserName() {
     return applyDecorators(

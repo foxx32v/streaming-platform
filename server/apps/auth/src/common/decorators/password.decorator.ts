@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
-import { PASSWORD_DECORATOR } from '../config/decorator.config';
+import { PASSWORD_DECORATOR } from '../config/helper/decorator.config';
 
 export function IsPassword() {
     return applyDecorators(

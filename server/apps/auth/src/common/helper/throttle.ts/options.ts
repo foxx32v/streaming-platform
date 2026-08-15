@@ -1,4 +1,4 @@
-import {ADMIN_LIMITER, GLOBAL_LIMITER, LOGIN_LIMITER, REGISTER_LIMITER} from "../../config/rateLimiter.config"
+import {ADMIN_LIMITER, GLOBAL_LIMITER, LOGIN_LIMITER, REGISTER_LIMITER} from "../../config/auth/rateLimiter.config"
 
 export const throttleRegisterOptions = {
     default: {

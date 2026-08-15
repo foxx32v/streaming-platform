@@ -4,29 +4,37 @@ import { AuthService } from './auth.service';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
-import { authGuard } from './common/guards/auth.guard';
-import { adminGuard } from './common/guards/admin.guard';
-import { GLOBAL_LIMITER } from './common/config/rateLimiter.config';
+import { authGuard } from './common/helper/guards/auth.guard';
+import { adminGuard } from './common/helper/guards/admin.guard';
+import { GLOBAL_LIMITER } from './common/config/auth/rateLimiter.config';
 import { resolve } from 'path';
+import { ACCESS_TOKEN } from './common/config/auth/jwt.config';
+import { GoogleStrategy, GithubStrategy, VkStrategy } from './common/helper/strategies/';
+import { googleGuard, githubGuard, vkGuard } from './common/helper/guards/';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: resolve(process.cwd(), 'apps/auth/.env'),  
-  }),
+      envFilePath: resolve(process.cwd(), 'apps/auth/.env'),
+    }),
     ThrottlerModule.forRoot({
       throttlers: [{
-      ttl: GLOBAL_LIMITER.TIMEOUT,
-      limit: GLOBAL_LIMITER.COUNT,
+        ttl: GLOBAL_LIMITER.TIMEOUT,
+        limit: GLOBAL_LIMITER.COUNT,
       }],
       errorMessage: GLOBAL_LIMITER.MESSAGE,
-  }),
+    }),
     JwtModule.register({
-      secret: process.env.JWT_ACCESS_SECRET || 'default-secret',
-      signOptions: { expiresIn: '15m' }
-  })],
+      secret: ACCESS_TOKEN.SECRET,
+      signOptions: { expiresIn: ACCESS_TOKEN.EXPIRES }
+    })
+  ],
   controllers: [AuthController],
-  providers: [AuthService, authGuard, adminGuard],
+  providers: [
+    AuthService, authGuard, adminGuard,
+    googleGuard, githubGuard, vkGuard,
+    GoogleStrategy, GithubStrategy, VkStrategy
+  ],
   exports: [JwtModule]
 })
 export class AuthModule {}

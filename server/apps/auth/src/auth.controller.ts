@@ -1,8 +1,8 @@
 import { Controller, Post, Get, Delete, Patch, Body, Query, Param, Headers, Ip, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto, LoginDto, RefreshDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto, VerifyEmailDto, UserIdDto, EmailDto, TokenDto, PaginationDto, BlockUserDto, SessionIdDto } from './common/dto/api';
-import { authGuard } from './common/guards/auth.guard';
-import { adminGuard } from './common/guards/admin.guard';
+import { authGuard } from './common/helper/guards/auth.guard';
+import { adminGuard } from './common/helper/guards/admin.guard';
 import { Throttle } from '@nestjs/throttler';
 import { throttleLoginOptions, throttleRegisterOptions, throttleAdminOptions, throttleGlobalOptions } from './common/helper/throttle.ts/options';
 
@@ -70,7 +70,7 @@ export class AuthController {
   @Post('change-password')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.OK)
-  changePassword(@Body() dto: ChangePasswordDto, @Query('userId') userId: string) {
+  changePassword(@Body() dto: ChangePasswordDto, @Query('userId') userId: UserIdDto) {
     return this.authService.changePassword(dto, userId);
   }
 
@@ -124,21 +124,21 @@ export class AuthController {
   @Patch('user/:id/role')
   @UseGuards(authGuard, adminGuard)
   @HttpCode(HttpStatus.OK)
-  changeUserRole(@Param('id') id: string, @Body('role') role: string) {
+  changeUserRole(@Param('id') id: UserIdDto, @Body('role') role: string) {
     return this.authService.changeUserRole(id, role);
   }
 
   @Post('user/:id/block')
   @UseGuards(authGuard, adminGuard)
   @HttpCode(HttpStatus.OK)
-  blockUser(@Param('id') id: string, @Body() dto: BlockUserDto) {
+  blockUser(@Param('id') id: UserIdDto, @Body() dto: BlockUserDto) {
     return this.authService.blockUser(id, dto.reason);
   }
 
   @Post('user/:id/unblock')
   @UseGuards(authGuard, adminGuard)
   @HttpCode(HttpStatus.OK)
-  unblockUser(@Param('id') id: string) {
+  unblockUser(@Param('id') id: UserIdDto) {
     return this.authService.unblockUser(id);
   }
 
@@ -146,7 +146,7 @@ export class AuthController {
 
   @Get('sessions')
   @UseGuards(authGuard)
-  getSessions(@Query('userId') userId: string) {
+  getSessions(@Query('userId') userId: UserIdDto) {
     return this.authService.getSessions(userId);
   }
 

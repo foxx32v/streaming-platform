@@ -2,7 +2,7 @@ import { UUID } from "crypto";
 import { db } from "../helper/db/db";
 import { UserDto } from "../dto/db/user.dto";
 import { ColorType, TokensType } from "../helper/types/helperTypes";
-import { EmailDto } from "../dto/api";
+import { EmailDto, UserIdDto } from "../dto/api";
 
 class UserRepository {
     async CreateUser(email: string, passwordHash: string, userName: string, linkActivate: string, avatarColor: ColorType) {
@@ -13,7 +13,7 @@ class UserRepository {
         [email, passwordHash, userName, linkActivate, avatarColor]);
     }
 
-    async ResetEmail(id: UUID, email: string) {
+    async ResetEmail(id: UserIdDto, email: string) {
         await db.query(`
             UPDATE users
             SET email = $2
@@ -21,7 +21,7 @@ class UserRepository {
         [id, email])
     }
 
-    async ResetPassword(id: UUID, hashPassword: string) {
+    async ResetPassword(id: UserIdDto, hashPassword: string) {
         await db.query(`
             UPDATE users
             SET password = $2
@@ -29,12 +29,12 @@ class UserRepository {
         [id, hashPassword])
     }
 
-    async GetUserById(id: UUID) {
+    async GetUserById(id: UserIdDto) {
         const user = await db.query(`
             SELECT * FROM users
             WHERE id = $1`,
         [id])
-        return user
+        return user.rows[0]
     }
 
     async GetUserByEmail(email: string) {
@@ -42,7 +42,7 @@ class UserRepository {
             SELECT * FROM users
             WHERE email = $1`,
         [email])
-        return user
+        return user.rows[0]
     }
 
     async GetUserByUserName(userName: string) {
@@ -50,16 +50,14 @@ class UserRepository {
             SELECT * FROM users
             WHERE userName = $1`,
         [userName])
-        return user
+        return user.rows[0]
     }
 
     async ExistsByEmail(email: string) {
-        try {
         const result = await db.query(`
             SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)`,
         [email])
         return result.rows[0].exists
-        } catch (error) {console.error(error)}
     }
 
     async ExistsByUserName(userName: string) {
@@ -69,7 +67,7 @@ class UserRepository {
         return result.rows[0].exists
     }
 
-    async ChangeUserRole(id: UUID, role: string) {
+    async ChangeUserRole(id: UserIdDto, role: string) {
         await db.query(`
             UPDATE users
             SET role = $2
@@ -77,7 +75,7 @@ class UserRepository {
         [id, role])
     }
 
-    async ChangeBlockUser(id: UUID, isBlock: boolean) {
+    async ChangeBlockUser(id: UserIdDto, isBlock: boolean) {
         await db.query(`
             UPDATE users
             SET isBlocked = $2
@@ -85,24 +83,32 @@ class UserRepository {
         [id, isBlock])
     }
 
-    async GetTokens(id: UUID) {
+    async GetTokens(id: UserIdDto) {
         const tokens = await db.query(`
             SELECT refreshToken, accessToken
             FROM users
             WHERE id = $1`,
         [id])
-        return tokens
+        return tokens.rows[0]
     }
 
-    async UpdateTokens(id: UUID, tokens: TokensType) {
+    async DeleteTokens(id: UserIdDto) {
+        await db.query(`
+            UPDATE users
+            SET refreshToken = NULL, accessToken = NULL
+            WHERE id = $1`,
+        [id]);
+    }
+
+    async UpdateTokens(id: UserIdDto, tokens: TokensType) {
         await db.query(`
             UPDATE users
             SET refreshToken = $2, accessToken = $3
             WHERE id = $1`,
-        [id, tokens.access, tokens.refresh])
+        [id, tokens.accessToken, tokens.refreshToken])
     }
 
-    async UpdateLastSeen(id: UUID) {
+    async UpdateLastSeen(id: UserIdDto) {
         await db.query(`
             UPDATE users
             SET lastSeenAt = NOW()
@@ -118,7 +124,7 @@ class UserRepository {
             ORDER BY createdAt DESC
             LIMIT $1 OFFSET $2`,
         [limit, offset])
-        return users
+        return users.rows
     }
 
     async CountUsers() {
@@ -127,7 +133,7 @@ class UserRepository {
         return parseInt(result.rows[0].count)
     }
 
-    async DeleteUser(id: UUID) {
+    async DeleteUser(id: UserIdDto) {
         await db.query(`
             DELETE FROM users
             WHERE id = $1`,
@@ -139,15 +145,39 @@ class UserRepository {
             SELECT * FROM users
             WHERE refreshToken = $1`,
         [refreshToken])
-        return user
+        return user.rows[0]
     }
 
-    async UpdateRefreshToken(id: UUID, refreshToken: string) {
+    async UpdateRefreshToken(id: UserIdDto, refreshToken: string) {
         await db.query(`
             UPDATE users
             SET refreshToken = $2
             WHERE id = $1`,
         [id, refreshToken])
+    }
+
+    async UpdateLinkActivate(id: UserIdDto, linkActivation: string) {
+        await db.query(`
+            UPDATE INTO users
+            SET linkActivation = $2
+            WHERE id = $1`,
+        [id, linkActivation])
+    }
+
+    async UpdateResetTokens(id: UserIdDto, resetToken: string) {
+        await db.query(`
+            UPDATE INTO users
+            SET resetToken = $2
+            WHERE id = $1`,
+        [id, resetToken])
+    }
+
+    async GetUserByResetToken(resetToken: string) {
+        const user = await db.query(`
+            SELECT * FROM users
+            WHERE resetToken = $1`,
+        [resetToken])
+        return user.rows[0]
     }
 }
 

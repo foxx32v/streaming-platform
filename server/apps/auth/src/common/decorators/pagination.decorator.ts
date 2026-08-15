@@ -1,6 +1,6 @@
 import { applyDecorators } from '@nestjs/common';
 import { IsOptional, IsNumber, Min, Max } from 'class-validator';
-import { PAGINATION_CONFIG } from '../config/pagination.config'
+import { PAGINATION_CONFIG } from '../config/auth/pagination.config'
 
 export function IsPage() {
     return applyDecorators(

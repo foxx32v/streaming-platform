@@ -1,8 +1,9 @@
-import { IsPassword } from "../../decorators/password.decorator";
+import { IsPassword } from "../../decorators";
 
 export class ResetPasswordDto {
     @IsPassword()
-    "oldPassword": string;
-    @IsPassword()
     "newPassword": string;
+    @IsPassword()
+    "doublePassword": string;
+    'resetToken': string;
 }
