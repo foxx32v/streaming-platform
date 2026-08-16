@@ -6,7 +6,7 @@ export class JwtService {
     generateTokens(payload: object): TokensType {
         const refreshToken = sign(payload, REFRESH_TOKEN.SECRET, {expiresIn: REFRESH_TOKEN.EXPIRES})
         const accessToken = sign(payload, ACCESS_TOKEN.SECRET, {expiresIn: ACCESS_TOKEN.EXPIRES})
-        return {refreshToken: refreshToken, accessToken: accessToken}
+        return { refreshToken, accessToken }
     }
     verifyAccessToken(token: string) {
         return verify(token, ACCESS_TOKEN.SECRET)

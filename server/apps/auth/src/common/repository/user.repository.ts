@@ -13,7 +13,7 @@ class UserRepository {
         [email, passwordHash, userName, linkActivate, avatarColor]);
     }
 
-    async ResetEmail(id: UserIdDto, email: string) {
+    async ResetEmail(id: string, email: string) {
         await db.query(`
             UPDATE users
             SET email = $2
@@ -21,20 +21,20 @@ class UserRepository {
         [id, email])
     }
 
-    async ResetPassword(id: UserIdDto, hashPassword: string) {
+    async ResetPassword(id: string, passwordHash: string) {
         await db.query(`
             UPDATE users
-            SET password = $2
+            SET passwordHash = $2
             WHERE id = $1`,
-        [id, hashPassword])
+        [id, passwordHash])
     }
 
-    async GetUserById(id: UserIdDto) {
+    async GetUserById(id: string) {
         const user = await db.query(`
             SELECT * FROM users
             WHERE id = $1`,
         [id])
-        return user.rows[0]
+        return user.rows[0] || null
     }
 
     async GetUserByEmail(email: string) {
@@ -67,7 +67,7 @@ class UserRepository {
         return result.rows[0].exists
     }
 
-    async ChangeUserRole(id: UserIdDto, role: string) {
+    async ChangeUserRole(id: string, role: string) {
         await db.query(`
             UPDATE users
             SET role = $2
@@ -75,7 +75,7 @@ class UserRepository {
         [id, role])
     }
 
-    async ChangeBlockUser(id: UserIdDto, isBlock: boolean) {
+    async ChangeBlockUser(id: string, isBlock: boolean) {
         await db.query(`
             UPDATE users
             SET isBlocked = $2
@@ -83,7 +83,7 @@ class UserRepository {
         [id, isBlock])
     }
 
-    async GetTokens(id: UserIdDto) {
+    async GetTokens(id: string) {
         const tokens = await db.query(`
             SELECT refreshToken, accessToken
             FROM users
@@ -92,7 +92,7 @@ class UserRepository {
         return tokens.rows[0]
     }
 
-    async DeleteTokens(id: UserIdDto) {
+    async DeleteTokens(id: string) {
         await db.query(`
             UPDATE users
             SET refreshToken = NULL, accessToken = NULL
@@ -100,7 +100,7 @@ class UserRepository {
         [id]);
     }
 
-    async UpdateTokens(id: UserIdDto, tokens: TokensType) {
+    async UpdateTokens(id: string, tokens: TokensType) {
         await db.query(`
             UPDATE users
             SET refreshToken = $2, accessToken = $3
@@ -108,7 +108,7 @@ class UserRepository {
         [id, tokens.accessToken, tokens.refreshToken])
     }
 
-    async UpdateLastSeen(id: UserIdDto) {
+    async UpdateLastSeen(id: string) {
         await db.query(`
             UPDATE users
             SET lastSeenAt = NOW()
@@ -133,7 +133,7 @@ class UserRepository {
         return parseInt(result.rows[0].count)
     }
 
-    async DeleteUser(id: UserIdDto) {
+    async DeleteUser(id: string) {
         await db.query(`
             DELETE FROM users
             WHERE id = $1`,
@@ -148,7 +148,7 @@ class UserRepository {
         return user.rows[0]
     }
 
-    async UpdateRefreshToken(id: UserIdDto, refreshToken: string) {
+    async UpdateRefreshToken(id: string, refreshToken: string) {
         await db.query(`
             UPDATE users
             SET refreshToken = $2
@@ -156,17 +156,17 @@ class UserRepository {
         [id, refreshToken])
     }
 
-    async UpdateLinkActivate(id: UserIdDto, linkActivation: string) {
+    async UpdateLinkActivate(id: string, linkActivation: string) {
         await db.query(`
-            UPDATE INTO users
+            UPDATE users
             SET linkActivation = $2
             WHERE id = $1`,
         [id, linkActivation])
     }
 
-    async UpdateResetTokens(id: UserIdDto, resetToken: string) {
+    async UpdateResetTokens(id: string, resetToken: string) {
         await db.query(`
-            UPDATE INTO users
+            UPDATE users
             SET resetToken = $2
             WHERE id = $1`,
         [id, resetToken])
@@ -178,6 +178,24 @@ class UserRepository {
             WHERE resetToken = $1`,
         [resetToken])
         return user.rows[0]
+    }
+
+    async UpdateBlockReason(id: string, reason: string) {
+        await db.query(`
+            UPDATE users
+            SET reason = $2
+            WHERE id = $1`,
+        [id, reason])
+    }
+
+    async CreateUserOAuth(email: string, passwordHash: string, userName: string, provider: string, avatar: string, avatarColor: ColorType) {
+        const result = await db.query(`
+            INSERT INTO users
+            (email, passwordHash, userName, provider, avatar, avatarColor, isActivate)
+            VALUES($1, $2, $3, $4, $5, $6, true)
+            RETURNING id, email, userName, role, isActivate`,
+        [email, passwordHash, userName, provider, avatar, avatarColor]);
+        return result.rows[0];
     }
 }
 

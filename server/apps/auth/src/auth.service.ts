@@ -8,6 +8,10 @@ import { mailer } from './common/helper/mailer/mailer.util';
 import * as bcrypt from 'bcrypt';
 import { UUID } from "crypto";
 import { jwtService } from './common/helper/jwt/jwt.helper';
+import sessionsRepository from './common/repository/sessions.repository';
+import { REFRESH_TOKEN } from './common/config/auth/jwt.config';
+import { UserDto } from './common/dto/db/user.dto';
+import { TokensType } from './common/helper/types/helperTypes';
 @Injectable()
 export class AuthService {
   async register(dto: RegisterDto, ip: string) {
@@ -20,26 +24,29 @@ export class AuthService {
     const passwordHash = await bcrypt.hash(dto.password, 10)
     const avatarColor = GetRandomColor()
     await userRepository.CreateUser(dto.email, passwordHash, dto.userName, linkActivation, avatarColor)
-    //await mailer.sendVerificationEmail(dto.email, linkActivation)
+    await mailer.sendVerificationEmail(dto.email, linkActivation)
     return Responser(201, 'User registered successfully', { email: dto.email })
   }
 
   async login(dto: LoginDto, ip: string, userAgent: string) {
     const user = await userRepository.GetUserByEmail(dto.email)
     if (!user) throw new HttpException('user not found.', 404)
-    const isMatchPassword = await bcrypt.compare(dto.password, user.passwordHash)
+    const isMatchPassword = await bcrypt.compare(dto.password, user.passwordhash)
     if (!isMatchPassword) throw new HttpException('Invalid password', 401)
     const payload = {id: user.id, email: user.email, role: user.role}
     const tokens = jwtService.generateTokens(payload)
     await userRepository.UpdateTokens(user.id, tokens)
-    //mailer.velcome(user.email)
+    const expiresAt = new Date(Date.now() + REFRESH_TOKEN.EXPIRES)
+    await sessionsRepository.CreateSession(user.id, tokens.refreshToken, userAgent, ip, expiresAt)
+    await mailer.welcome(user.email)
     return Responser(200, 'User successful', tokens)
   }
 
-  async logout(userId: UserIdDto) {
+  async logout(userId: string) {
     const user = await userRepository.GetUserById(userId)
     if (!user) throw new HttpException('User not found', 404)
     await userRepository.DeleteTokens(userId)
+    await sessionsRepository.RevokeAllSessions(userId)
     return Responser(200, 'Logout successful')
   }
 
@@ -48,6 +55,8 @@ export class AuthService {
     try {
     payload = jwtService.verifyRefreshToken(dto.refresh)
     } catch (error) {throw new HttpException('Invalid refresh token', 401)}
+    const session = await sessionsRepository.GetSessionByRefreshToken(dto.refresh)
+    if (!session) throw new HttpException('Session not found', 404)
     const user = await userRepository.GetUserById(payload.id)
     if (!user) throw new HttpException('User not found', 404)
     const tokens = jwtService.generateTokens({id: user.id, email: user.email, role: user.role})
@@ -60,7 +69,7 @@ export class AuthService {
     if (!user) throw new HttpException('User not found', 404)
     const linkActivation = crypto.randomUUID()
     await userRepository.UpdateLinkActivate(user.id, linkActivation)
-    //await mailer.sendVerifiy  cationEmail(dto.email, linkActivation)
+    await mailer.sendVerificationEmail(dto.email, linkActivation)
     return Responser(200, 'Verification email sent successfully')
   }
 
@@ -70,7 +79,7 @@ export class AuthService {
     if (user.isActivate) throw new HttpException('Email already verified', 409)
     const linkActivation = crypto.randomUUID()
     await userRepository.UpdateLinkActivate(user.id, linkActivation)
-    //await mailer.sendVerificationEmail(email, linkActivation)
+    await mailer.sendVerificationEmail(email, linkActivation)
     return Responser(200, 'Verification email sent successfully')
 }
 
@@ -79,7 +88,7 @@ export class AuthService {
     if (!user) throw new HttpException('User not found', 404)
     const resetToken = crypto.randomUUID()
     await userRepository.UpdateResetTokens(user.id, resetToken)
-    //await mailer.sendResetPasswordEmail(dto.email, resetToken)
+    await mailer.sendResetPasswordEmail(dto.email, resetToken)
     return Responser(200, 'Password reset email sent successfully')
 }
 
@@ -93,38 +102,36 @@ export class AuthService {
     return Responser(200, 'Password reset successfully')
   }
 
-  async changePassword(dto: ChangePasswordDto, userId: UserIdDto) {
+  async changePassword(dto: ChangePasswordDto, userId: string) {
     const user = await userRepository.GetUserById(userId)
     if (!user) throw new HttpException('User not found', 404)
-    const isMatchPassword = await bcrypt.compare(dto.oldPassword, user.passwordHash)
+    const isMatchPassword = await bcrypt.compare(dto.oldPassword, user.passwordhash)
     if (!isMatchPassword) throw new HttpException('Current password is incorrect', 401)
-    const hashPassword = await bcrypt.hash(dto.newPassword, 10)
-    await userRepository.ResetPassword(user.id, hashPassword)
+    const passwordHash = await bcrypt.hash(dto.newPassword, 10)
+    await userRepository.ResetPassword(user.id, passwordHash)
     return Responser(200, 'Password changed successfully')
   }
 
-  async googleLogin() {
-    return { message: 'Google login endpoint' };
+  async googleCallback(user: any) {
+    return this.handleOAuthLogin(user, 'google')
   }
 
-  async googleCallback(code: string) {
-    return { message: 'Google callback endpoint' };
+  async githubCallback(user: any) {
+    return this.handleOAuthLogin(user, 'github')
   }
 
-  async githubLogin() {
-    return { message: 'GitHub login endpoint' };
-  }
-
-  async githubCallback(code: string) {
-    return { message: 'GitHub callback endpoint' };
-  }
-
-  async vkLogin() {
-    return { message: 'VK login endpoint' };
-  }
-
-  async vkCallback(code: string) {
-    return { message: 'VK callback endpoint' };
+  private async handleOAuthLogin(profile: any, provider: string): Promise<TokensType> {
+    let user = await userRepository.GetUserByEmail(profile.email)
+    if (!user) {
+        const userName = profile.username || profile.email.split('@')[0]
+        const passwordHash = await bcrypt.hash(crypto.randomUUID(), 10)
+        const avatarColor = GetRandomColor()
+        user = await userRepository.CreateUserOAuth(profile.email, passwordHash, userName, provider, profile.picture || null, avatarColor)
+    }
+    const payload = { id: user.id, email: user.email, role: user.role }
+    const tokens: TokensType = jwtService.generateTokens(payload)
+    await userRepository.UpdateTokens(user.id, tokens)
+    return tokens
   }
 
   async getAllUsers(page: number, limit: number) {
@@ -133,29 +140,29 @@ export class AuthService {
     return Responser(200, 'Users retrieved successfully', {users, total, page, limit, totalPages: Math.ceil(total / limit)})
   }
 
-  async getUserById(id: UserIdDto) {
+  async getUserById(id: string) {
     const user = await userRepository.GetUserById(id)
     if (!user) throw new HttpException('User not found', 404)
     return Responser(200, 'User retrieved successfully', user)
   }
 
-  async changeUserRole(id: UserIdDto, role: string) {
+  async changeUserRole(id: string, role: string) {
     const user = await userRepository.GetUserById(id)
     if (!user) throw new HttpException('User not found', 404)
     await userRepository.ChangeUserRole(id, role)
     return Responser(200, 'User role updated successfully')
   }
 
-  async blockUser(id: UserIdDto, reason?: string) {
+  async blockUser(id: string, reason: string) {
     const user = await userRepository.GetUserById(id)
     if (!user) throw new HttpException('User not found', 404)
     if (user.isBlocked) throw new HttpException('User already blocked', 409)
     await userRepository.ChangeBlockUser(id, true)
-    // await userRepository.UpdateBlockReason(id, reason) // ЕСЛИ ЕСТЬ ПОЛЕ
+    await userRepository.UpdateBlockReason(id, reason)
     return Responser(200, 'User blocked successfully')
   }
 
-  async unblockUser(id: UserIdDto) {
+  async unblockUser(id: string) {
     const user = await userRepository.GetUserById(id)
     if (!user) throw new HttpException('User not found', 404)
     if (!user.isBlocked) throw new HttpException('User is not blocked', 409)
@@ -163,18 +170,24 @@ export class AuthService {
     return Responser(200, 'User unblocked successfully')
   }
 
-  async getSessions(userId: UserIdDto) {
-    // ПОТОМ
-    return Responser(200, 'Sessions retrieved successfully', [])
+  async getSessions(userId: string) {
+    const user = await userRepository.GetUserById(userId)
+    if (!user) throw new HttpException('User not found', 404)
+    const sessions = await sessionsRepository.GetSessionsByUserId(userId)
+    return Responser(200, 'Sessions retrieved successfully', sessions)
   }
 
   async revokeSession(sessionId: string) {
-    // ПОТОМ 2
+    const session = await sessionsRepository.GetSessionById(sessionId)
+    if (!session) throw new HttpException('Session not found', 404)
+    await sessionsRepository.RevokeSession(sessionId)
     return Responser(200, 'Session revoked successfully')
   }
 
-  async revokeAllSessions(userId: UserIdDto) {
-    // ПОТОМ 3
+  async revokeAllSessions(userId: string) {
+    const user = await userRepository.GetUserById(userId)
+    if (!user) throw new HttpException('User not found', 404)
+    await sessionsRepository.RevokeAllSessions(userId)
     return Responser(200, 'All sessions revoked successfully')
   }
 

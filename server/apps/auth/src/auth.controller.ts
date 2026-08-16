@@ -1,10 +1,13 @@
-import { Controller, Post, Get, Delete, Patch, Body, Query, Param, Headers, Ip, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Delete, Patch, Body, Query, Param, Headers, Ip, UseGuards, HttpCode, HttpStatus, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { RegisterDto, LoginDto, RefreshDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto, VerifyEmailDto, UserIdDto, EmailDto, TokenDto, PaginationDto, BlockUserDto, SessionIdDto } from './common/dto/api';
+import { RegisterDto, LoginDto, RefreshDto, ChangePasswordDto, ForgetPasswordDto, ResetPasswordDto, VerifyEmailDto, EmailDto, TokenDto, PaginationDto, BlockUserDto, UserIdDto, SessionIdDto } from './common/dto/api';
 import { authGuard } from './common/helper/guards/auth.guard';
 import { adminGuard } from './common/helper/guards/admin.guard';
 import { Throttle } from '@nestjs/throttler';
 import { throttleLoginOptions, throttleRegisterOptions, throttleAdminOptions, throttleGlobalOptions } from './common/helper/throttle.ts/options';
+import { UUID } from 'crypto';
+import { githubGuard, googleGuard} from './common/helper/guards';
+import { OAuthUserDto, ResType, TokensType } from './common/helper/types/helperTypes';
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +32,7 @@ export class AuthController {
   @Delete('logout')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Body() dto: UserIdDto) {
+  logout(@Body() dto: { id: string }) {
     return this.authService.logout(dto.id);
   }
 
@@ -52,7 +55,7 @@ export class AuthController {
     return this.authService.resendVerification(dto.email);
   }
 
-// Восстонавление пароля
+// Восстановление пароля
 
   @Post('forget-password')
   @Throttle(throttleGlobalOptions)
@@ -70,40 +73,34 @@ export class AuthController {
   @Post('change-password')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.OK)
-  changePassword(@Body() dto: ChangePasswordDto, @Query('userId') userId: UserIdDto) {
+  changePassword(@Body() dto: ChangePasswordDto, @Query('userId') userId: string) {
     return this.authService.changePassword(dto, userId);
   }
 
 // Вход через штуки
 
   @Get('google')
-  googleLogin() {
-    return this.authService.googleLogin();
-  }
+  @UseGuards(googleGuard)
+  googleLogin() {}
 
   @Get('google/callback')
-  googleCallback(@Query('code') code: string) {
-    return this.authService.googleCallback(code);
+  @UseGuards(googleGuard)
+  async googleCallback(@Req() req: any, @Res() res: any) {
+    const user = (req as any).user as OAuthUserDto
+    const tokens = await this.authService.googleCallback(user)
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
   }
 
   @Get('github')
-  githubLogin() {
-    return this.authService.githubLogin();
-  }
+  @UseGuards(githubGuard)
+  githubLogin() {}
 
   @Get('github/callback')
-  githubCallback(@Query('code') code: string) {
-    return this.authService.githubCallback(code);
-  }
-
-  @Get('vk')
-  vkLogin() {
-    return this.authService.vkLogin();
-  }
-
-  @Get('vk/callback')
-  vkCallback(@Query('code') code: string) {
-    return this.authService.vkCallback(code);
+  @UseGuards(githubGuard)
+  async githubCallback(@Req() req: any, @Res() res: any) {
+    const user = (req as any).user as OAuthUserDto
+    const tokens = await this.authService.githubCallback(user)
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
   }
 
 // Администрирование
@@ -117,28 +114,28 @@ export class AuthController {
 
   @Get('user/:id')
   @UseGuards(authGuard, adminGuard)
-  getUserById(@Param() dto: UserIdDto) {
-    return this.authService.getUserById(dto.id);
+  getUserById(@Param('id') id: string) {
+    return this.authService.getUserById(id);
   }
 
   @Patch('user/:id/role')
   @UseGuards(authGuard, adminGuard)
   @HttpCode(HttpStatus.OK)
-  changeUserRole(@Param('id') id: UserIdDto, @Body('role') role: string) {
+  changeUserRole(@Param('id') id: string, @Body('role') role: string) {
     return this.authService.changeUserRole(id, role);
   }
 
   @Post('user/:id/block')
   @UseGuards(authGuard, adminGuard)
   @HttpCode(HttpStatus.OK)
-  blockUser(@Param('id') id: UserIdDto, @Body() dto: BlockUserDto) {
+  blockUser(@Param('id') id: string, @Body() dto: BlockUserDto) {
     return this.authService.blockUser(id, dto.reason);
   }
 
   @Post('user/:id/unblock')
   @UseGuards(authGuard, adminGuard)
   @HttpCode(HttpStatus.OK)
-  unblockUser(@Param('id') id: UserIdDto) {
+  unblockUser(@Param('id') id: string) {
     return this.authService.unblockUser(id);
   }
 
@@ -146,21 +143,21 @@ export class AuthController {
 
   @Get('sessions')
   @UseGuards(authGuard)
-  getSessions(@Query('userId') userId: UserIdDto) {
+  getSessions(@Query('userId') userId: string) {
     return this.authService.getSessions(userId);
   }
 
   @Delete('session/:id')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  revokeSession(@Param() dto: SessionIdDto) {
-    return this.authService.revokeSession(dto.sessionId);
+  revokeSession(@Param('id') sessionId: string) {
+    return this.authService.revokeSession(sessionId);
   }
 
   @Delete('sessions')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  revokeAllSessions(@Body() dto: UserIdDto) {
+  revokeAllSessions(@Body() dto: { id: string }) {
     return this.authService.revokeAllSessions(dto.id);
   }
 

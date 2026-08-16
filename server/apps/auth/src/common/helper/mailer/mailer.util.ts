@@ -27,14 +27,41 @@ export class Mailer {
 
     async sendVerificationEmail(to: string, token: string) {
         const url = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
-        const html = `<p>V ${url}</>`
-        await this.sendMail(to, 'Verify email', html);
+        const html = `
+            <h1>Verify Your Email</h1>
+            <p>Hi!</p>
+            <p>Click the link below to verify your email:</p>
+            <a href="${url}">${url}</a>
+            <p>If you didn't register, ignore this email.</p>
+            <br>
+            <p>Best regards,<br>PerepihoticWatch Team</p>
+        `
+        await this.sendMail(to, 'Verify your email', html);
     }
 
     async sendResetPasswordEmail(to: string, token: string) {
         const url = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-        const html = `<p>R ${url}</p>`
-        await this.sendMail(to, 'Reset password', html);
+        const html = `
+            <h1>Reset Your Password</h1>
+            <p>Hi!</p>
+            <p>Click the link below to reset your password:</p>
+            <a href="${url}">${url}</a>
+            <p>If you didn't request this, ignore this email.</p>
+            <br>
+            <p>Best regards,<br>PerepihoticWatch Team</p>
+        `
+        await this.sendMail(to, 'Reset your password', html);
+    }
+
+    async welcome(to: string) {
+        const html = `
+            <h1>Welcome to PerepihoticWatch!</h1>
+            <p>We're glad to have you on board!</p>
+            <p>Enjoy your stay!</p>
+            <br>
+            <p>Best regards,<br>PerepihoticWatch Team</p>
+        `
+        await this.sendMail(to, 'Welcome to PerepihoticWatch!', html);
     }
 }
 

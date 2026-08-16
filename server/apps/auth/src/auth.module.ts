@@ -9,8 +9,8 @@ import { adminGuard } from './common/helper/guards/admin.guard';
 import { GLOBAL_LIMITER } from './common/config/auth/rateLimiter.config';
 import { resolve } from 'path';
 import { ACCESS_TOKEN } from './common/config/auth/jwt.config';
-import { GoogleStrategy, GithubStrategy, VkStrategy } from './common/helper/strategies/';
-import { googleGuard, githubGuard, vkGuard } from './common/helper/guards/';
+import { GoogleStrategy, GithubStrategy } from './common/helper/strategies/';
+import { googleGuard, githubGuard } from './common/helper/guards/';
 
 @Module({
   imports: [
@@ -32,8 +32,8 @@ import { googleGuard, githubGuard, vkGuard } from './common/helper/guards/';
   controllers: [AuthController],
   providers: [
     AuthService, authGuard, adminGuard,
-    googleGuard, githubGuard, vkGuard,
-    GoogleStrategy, GithubStrategy, VkStrategy
+    googleGuard, githubGuard,
+    GoogleStrategy, GithubStrategy
   ],
   exports: [JwtModule]
 })

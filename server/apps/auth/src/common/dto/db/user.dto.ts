@@ -29,4 +29,5 @@ export class UserDto {
     'subscriptionTier': string
     'isPremium': boolean
     'stripeCustomerId': string
+    'reason': string
 }
