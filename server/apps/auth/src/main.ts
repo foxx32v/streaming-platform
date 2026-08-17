@@ -6,6 +6,6 @@ import { HttpExceptionFilter } from './common/helper/filters/http.exception.filt
 async function bootstrap() {
   const app = await NestFactory.create(AuthModule);
   app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
