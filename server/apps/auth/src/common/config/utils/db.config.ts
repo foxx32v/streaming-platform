@@ -1,4 +1,5 @@
-require('dotenv').config({path: './apps/auth/.env'});
+require('dotenv').config()
+
 export const DB_CONFIG = {
     DB_HOST: process.env.DB_HOST,
     DB_PORT: parseInt(process.env.DB_PORT || '5432'),

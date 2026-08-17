@@ -15,7 +15,7 @@ import { googleGuard, githubGuard } from './common/helper/guards/';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: resolve(process.cwd(), 'apps/auth/.env'),
+      envFilePath: '.env',
     }),
     ThrottlerModule.forRoot({
       throttlers: [{

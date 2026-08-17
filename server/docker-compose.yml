@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_auth
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 24265456Ff
+      POSTGRES_DB: auth
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth:
+    build:
+      context: .
+      dockerfile: apps/auth/Dockerfile
+    container_name: auth_service
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./.env
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

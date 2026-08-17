@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './apps/auth/.env' })
+require('dotenv').config()
 
 export const MAILER_CONFIG = {
     HOST: process.env.MAIL_HOST,

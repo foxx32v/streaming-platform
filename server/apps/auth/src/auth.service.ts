@@ -12,9 +12,12 @@ import sessionsRepository from './common/repository/sessions.repository';
 import { REFRESH_TOKEN } from './common/config/auth/jwt.config';
 import { UserDto } from './common/dto/db/user.dto';
 import { TokensType } from './common/helper/types/helperTypes';
+import { MAILER_CONFIG } from './common/config/utils/mailer.config';
 @Injectable()
 export class AuthService {
   async register(dto: RegisterDto, ip: string) {
+    console.log(MAILER_CONFIG)
+    console.log('ЭТО ЛОГ ГОВОРЯЩИЙ О ТОМ ЧТО ВСЁ РАБОТАЕТ')
     if (dto.password !== dto.doublePassword) throw new HttpException('Passwords do not match', 400)
     const isUserByEmail = await userRepository.ExistsByEmail(dto.email)
     if (isUserByEmail) throw new HttpException('Email already exists', 409)

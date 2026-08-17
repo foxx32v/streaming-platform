@@ -1,4 +1,4 @@
-require('dotenv').config('./apps/auth/.env')
+require('dotenv').config()
 
 export const STRATEGY_GOOGLE_CONFIG = {
     CLIENT_ID: process.env.GOOGLE_CLIENT_ID,

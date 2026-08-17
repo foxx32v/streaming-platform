@@ -1,9 +1,9 @@
+require(`dotenv`).config()
 import * as nodemailer from 'nodemailer';
 import { MAILER_CONFIG } from "../../config/utils/mailer.config";
 
 export class Mailer {
     private transporter: nodemailer.Transporter;
-
     constructor() {
         this.transporter = nodemailer.createTransport({
             host: MAILER_CONFIG.HOST,

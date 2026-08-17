@@ -1,4 +1,4 @@
-require('dotenv').config({ path: './apps/auth/.env' });
+require('dotenv').config()
 import { NestFactory } from '@nestjs/core';
 import { AuthModule } from './auth.module';
 import { HttpExceptionFilter } from './common/helper/filters/http.exception.filter';
