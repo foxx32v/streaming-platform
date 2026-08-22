@@ -8,7 +8,7 @@ class UserRepository {
     async CreateUser(email: string, passwordHash: string, userName: string, linkActivate: string, avatarColor: ColorType) {
         await db.query(`
             INSERT INTO users
-            (email, passwordHash, userName, linkActivate, avatarColor)
+            (email, passwordHash, userName, linkactivate, avatarColor)
             VALUES($1,$2,$3,$4,$5)`,
         [email, passwordHash, userName, linkActivate, avatarColor]);
     }
@@ -51,6 +51,22 @@ class UserRepository {
             WHERE userName = $1`,
         [userName])
         return user.rows[0]
+    }
+
+    async GetUserByLinkActivate(linkActivation: string) {
+        const user = await db.query(`
+            SELECT * FROM users
+            WHERE linkactivate = $1`,
+        [linkActivation])
+        return user.rows[0]
+    }
+
+    async ActivateUser(id: string) {
+        await db.query(`
+            UPDATE users
+            SET isActivate = TRUE
+            WHERE id = $1`,
+        [id])
     }
 
     async ExistsByEmail(email: string) {
@@ -159,7 +175,7 @@ class UserRepository {
     async UpdateLinkActivate(id: string, linkActivation: string) {
         await db.query(`
             UPDATE users
-            SET linkActivation = $2
+            SET linkactivate = $2
             WHERE id = $1`,
         [id, linkActivation])
     }

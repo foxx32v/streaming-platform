@@ -1,0 +1,181 @@
+@import '../core/variables';
+
+.formRegistration, .formLogin, .cardVerifyEmail {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 400px;
+    background: var(--theme_bg_card);
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: var(--theme_shadow);
+    border: 1px solid var(--theme_border_color);
+    margin: 20px;
+    } h2 {
+    color: var(--theme_font_color);
+    font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 8px;
+    letter-spacing: -0.5px;
+    } button {
+        background: var(--theme_link);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        width: 100%;
+        &:hover {
+            opacity: 0.85;
+        } &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+}}
+
+.cardVerifyEmail {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 400px;
+    background: var(--theme_bg_card);
+    padding: 32px;
+    border-radius: 16px;
+    box-shadow: var(--theme_shadow);
+    border: 1px solid var(--theme_border_color);
+    align-items: center;
+    text-align: center;
+    margin: auto;
+    .link {text-align: center}
+}
+
+.headerAuth {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 10px;
+    background: var(--theme_bg_card);
+    border-bottom: 1px solid var(--theme_border_color);
+    max-width: 100%;
+    overflow-x: auto;
+    margin-bottom: auto;
+    &::-webkit-scrollbar {
+        height: 4px;
+    } &::-webkit-scrollbar-thumb {
+        background: var(--theme_border_color);
+        border-radius: 4px;
+}}
+
+.homePage {
+    display: flex;
+    position: fixed, 10;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+    h1 {
+        color: var(--theme_font_color);
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: -1px;
+    } p {
+        color: var(--theme_font_color_primary);
+        font-size: 18px;
+        max-width: 500px;
+}}
+
+.footerAuth {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    background: var(--theme_bg_card);
+    border-top: 1px solid var(--theme_border_color);
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: auto;
+    .footerLeft {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-left: 12px;
+        p {
+            color: var(--theme_font_color_primary);
+            font-size: 14px;
+            margin: 0;
+    }} .footerLinks {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        a {
+            color: var(--theme_font_color_primary);
+            font-size: 13px;
+            text-decoration: none;
+            transition: color 0.2s;
+            &:hover {
+            color: var(--theme_link);
+            text-decoration: underline;
+}}}}
+
+.homePage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    text-align: center;
+    gap: 16px;
+    padding: 20px;
+    h1 {
+        color: var(--theme_font_color);
+        font-size: 48px;
+        font-weight: 700;
+        letter-spacing: -1px;
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 48px;
+            background: var(--theme_link);
+            margin-left: 4px;
+            animation: blink 0.8s step-end infinite;
+        }} p {
+        color: var(--theme_font_color_primary);
+        font-size: 18px;
+        max-width: 500px;
+        opacity: 0;
+        animation: fadeIn 1s ease 1s forwards;
+    } .homeActions {
+        opacity: 0;
+        animation: fadeIn 1s ease 1.5s forwards;
+        button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            background: var(--theme_link);
+            color: white;
+            transition: opacity 0.2s, transform 0.2s;
+            &:hover {
+                opacity: 0.85;
+                transform: scale(1.02);
+}}}}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

@@ -22,11 +22,11 @@ services:
       dockerfile: apps/auth/Dockerfile
     container_name: auth_service
     ports:
-      - "3001:3000"
+      - "3000:3000"
     env_file:
       - ./server/.env
     environment:
-    - PORT=3001
+    - PORT=3000
     depends_on:
       postgres:
         condition: service_healthy
@@ -37,9 +37,9 @@ services:
       dockerfile: Dockerfile
     container_name: client_service
     ports:
-      - "3000:3000"
+      - "3001:3001"
     environment:
-      - NEXT_PUBLIC_API_URL=http://auth:3001
+      - NEXT_PUBLIC_API_URL=http://auth:3000
     depends_on:
       - auth
 

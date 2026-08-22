@@ -1,0 +1,8 @@
+@import '../src/styles/index';
+
+body {
+    background: var(--theme_bg);
+    color: var(--theme_font_color);
+    max-width: 100%;
+    margin: 0px;
+}

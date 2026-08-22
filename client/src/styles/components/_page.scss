@@ -1,0 +1,11 @@
+@import '../core/variables';
+
+.pageAuth {
+    display: flex;
+    flex-direction: column; 
+    align-items: center;          // ✅ ПО ГОРИЗОНТАЛИ ЦЕНТР
+    justify-content: flex-start;  // ✅ ПО ВЕРТИКАЛИ СВЕРХУ
+    background: var(--theme_bg);
+    gap: 20px;
+    min-height: 100vh;
+}

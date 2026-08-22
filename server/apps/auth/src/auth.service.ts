@@ -26,13 +26,14 @@ export class AuthService {
     const avatarColor = GetRandomColor()
     await userRepository.CreateUser(dto.email, passwordHash, dto.userName, linkActivation, avatarColor)
     await mailer.sendVerificationEmail(dto.email, linkActivation)
-    return Responser(201, 'User registered successfully', { email: dto.email })
+    return Responser(201, 'You have successfully registered. Check your email.', { email: dto.email })
   }
 
   async login(dto: LoginDto, ip: string, userAgent: string) {
     const user = await userRepository.GetUserByEmail(dto.email)
     if (!user) throw new HttpException('user not found.', 404)
     const isMatchPassword = await bcrypt.compare(dto.password, user.passwordhash)
+    if (!user.isactivate) throw new HttpException('Please verify your email before logging in', 403)
     if (!isMatchPassword) throw new HttpException('Invalid password', 401)
     const payload = {id: user.id, email: user.email, role: user.role}
     const tokens = jwtService.generateTokens(payload)
@@ -66,12 +67,11 @@ export class AuthService {
   }
 
   async verifyEmail(dto: VerifyEmailDto) {
-    const user = await userRepository.GetUserByEmail(dto.email)
-    if (!user) throw new HttpException('User not found', 404)
-    const linkActivation = crypto.randomUUID()
-    await userRepository.UpdateLinkActivate(user.id, linkActivation)
-    await mailer.sendVerificationEmail(dto.email, linkActivation)
-    return Responser(200, 'Verification email sent successfully')
+    const user = await userRepository.GetUserByLinkActivate(dto.linkActivate)
+    if (!user) throw new HttpException('Invalid or expired token', 400)
+    if (user.isActivate) throw new HttpException('Email already verified', 409)
+    await userRepository.ActivateUser(user.id)
+    return Responser(200, 'Email verified successfully')
   }
 
   async resendVerification(email: string) {

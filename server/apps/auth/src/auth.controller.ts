@@ -32,8 +32,8 @@ export class AuthController {
   @Delete('logout')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  logout(@Body() dto: { id: string }) {
-    return this.authService.logout(dto.id);
+  logout(@Req() req: any) {
+    return this.authService.logout(req.user.id);
   }
 
   @Post('refresh')
@@ -55,7 +55,7 @@ export class AuthController {
     return this.authService.resendVerification(dto.email);
   }
 
-// Восстановление пароля
+// Password recovery
 
   @Post('forget-password')
   @Throttle(throttleGlobalOptions)
@@ -73,11 +73,11 @@ export class AuthController {
   @Post('change-password')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.OK)
-  changePassword(@Body() dto: ChangePasswordDto, @Query('userId') userId: string) {
-    return this.authService.changePassword(dto, userId);
+  changePassword(@Body() dto: ChangePasswordDto, @Req() req: any) {
+    return this.authService.changePassword(dto, req.user.id);
   }
 
-// Вход через штуки
+// OAuth login
 
   @Get('google')
   @UseGuards(googleGuard)
@@ -103,7 +103,7 @@ export class AuthController {
     res.redirect(`${process.env.FRONTEND_URL}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
   }
 
-// Администрирование
+// Admin
 
   @Get('users')
   @UseGuards(authGuard, adminGuard)
@@ -139,12 +139,12 @@ export class AuthController {
     return this.authService.unblockUser(id);
   }
 
-// Сессии
+// Sessions
 
   @Get('sessions')
   @UseGuards(authGuard)
-  getSessions(@Query('userId') userId: string) {
-    return this.authService.getSessions(userId);
+  getSessions(@Req() req: any) {
+    return this.authService.getSessions(req.user.id);
   }
 
   @Delete('session/:id')
@@ -157,11 +157,11 @@ export class AuthController {
   @Delete('sessions')
   @UseGuards(authGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  revokeAllSessions(@Body() dto: { id: string }) {
-    return this.authService.revokeAllSessions(dto.id);
+  revokeAllSessions(@Req() req: any) {
+    return this.authService.revokeAllSessions(req.user.id);
   }
 
-// Токены
+// Tokens
 
   @Post('verify')
   @HttpCode(HttpStatus.OK)
