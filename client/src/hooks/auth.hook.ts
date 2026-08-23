@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { authApi } from "../api"
-import { IChangePassword, IForgetPassword, ILogin, ILogout, IPagination, IRefresh, IRegistration, IResendVerification, IResetPassword, IResponse, IVerificationEmail, LoaderProps } from "../dto"
+import { IChangePassword, IForgetPassword, ILogin, ILogout, IPagination, IRefresh, IRegistration, IResendVerification, IResetPassword, IResponse, IVerificationEmail } from "../dto"
+import { IError } from '../dto'
 
 export const useAuth = () => {
     const [data, SetData] = useState<unknown>(null)
@@ -27,11 +28,12 @@ export const useAuth = () => {
         SetStatusCode(res.statusCode)
     }
 
-    const IsError = (error?: null|string) => {
+    const IsError = (error?: null|string, statusCode?: number|null) => {
         SetIsLoading(false)
         SetMessage(null)
         SetError(error??null)
         SetStatus('error')
+        SetStatusCode(statusCode??null)
     }
 
     const Register = async (body: IRegistration) => {
@@ -39,7 +41,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.Register(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -48,7 +51,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.Login(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -57,7 +61,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.Logout()
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -66,7 +71,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.Refresh(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -75,7 +81,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.ChangePassword(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -84,7 +91,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.VerifyEmail(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -93,7 +101,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.ResendVerification(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -102,7 +111,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.ForgetPassword(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -111,7 +121,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.ResetPassword(body)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -120,7 +131,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.GetAllUsers(params)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -129,7 +141,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.GetUserById(userId)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -138,7 +151,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.ChangeUserRole(userId, role)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -147,7 +161,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.BlockUser(userId, reason)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -156,7 +171,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.UnblockUser(userId)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -165,7 +181,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.GetSessions()
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -174,7 +191,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.RevokeSession(sessionId)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -183,7 +201,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.RevokeAllSessions()
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -192,7 +211,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.VerifyToken(token)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -201,7 +221,8 @@ export const useAuth = () => {
             Start(); const res = await authApi.ValidateToken(token)
             End(res); return res
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -209,7 +230,8 @@ export const useAuth = () => {
         try {
             Start(); authApi.GoogleLogin(); End({} as IResponse)
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 
@@ -217,7 +239,8 @@ export const useAuth = () => {
         try {
             Start(); authApi.GithubLogin(); End({} as IResponse)
         } catch (error: unknown) {
-            IsError(error instanceof Error ? error.message : 'Unknown error'); throw error
+            const err = error as IError
+            IsError(err.message, err.statusCode); throw error
         }
     }
 

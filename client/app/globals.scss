@@ -1,8 +1,18 @@
 @import '../src/styles/index';
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
 body {
     background: var(--theme_bg);
     color: var(--theme_font_color);
     max-width: 100%;
-    margin: 0px;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
 }

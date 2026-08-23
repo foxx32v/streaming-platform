@@ -2,10 +2,12 @@
 
 .pageAuth {
     display: flex;
-    flex-direction: column; 
-    align-items: center;          // ✅ ПО ГОРИЗОНТАЛИ ЦЕНТР
-    justify-content: flex-start;  // ✅ ПО ВЕРТИКАЛИ СВЕРХУ
-    background: var(--theme_bg);
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     gap: 20px;
     min-height: 100vh;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
 }

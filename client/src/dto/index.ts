@@ -14,3 +14,4 @@ export * from './components/A.Ui/buttonSetStateProps'
 
 // STORE
 export * from './store/pageStore';
+export * from './store/isAuthStore';

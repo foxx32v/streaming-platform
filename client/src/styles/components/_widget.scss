@@ -1,6 +1,6 @@
 @import '../core/variables';
 
-.formRegistration, .formLogin, .cardVerifyEmail {
+.formRegistration, .formLogin, .cardVerifyEmail, .logoutForm {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -11,7 +11,7 @@
     border-radius: 16px;
     box-shadow: var(--theme_shadow);
     border: 1px solid var(--theme_border_color);
-    margin: 20px;
+    margin: auto;
     } h2 {
     color: var(--theme_font_color);
     font-size: 24px;
@@ -36,7 +36,7 @@
             cursor: not-allowed;
 }}
 
-.cardVerifyEmail {
+.cardVerifyEmail, .logoutForm {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -54,43 +54,54 @@
 }
 
 .headerAuth {
-    min-width: 100%;
     display: flex;
-    justify-content: center;
-    gap: 8px;
-    padding: 10px 10px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2px;
     background: var(--theme_bg_card);
     border-bottom: 1px solid var(--theme_border_color);
-    max-width: 100%;
-    overflow-x: auto;
-    margin-bottom: auto;
-    &::-webkit-scrollbar {
-        height: 4px;
-    } &::-webkit-scrollbar-thumb {
-        background: var(--theme_border_color);
-        border-radius: 4px;
-}}
-
-.homePage {
-    display: flex;
-    position: fixed, 10;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    min-height: 80vh;
-    text-align: center;
+    width: 100%;
     gap: 16px;
-    padding: 20px;
-    h1 {
-        color: var(--theme_font_color);
-        font-size: 48px;
-        font-weight: 700;
-        letter-spacing: -1px;
-    } p {
-        color: var(--theme_font_color_primary);
-        font-size: 18px;
-        max-width: 500px;
-}}
+    .headerLeft {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-shrink: 0;
+        .headerTitle {
+            color: var(--theme_font_color);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }} .headerCenter {
+        display: flex;
+        gap: 8px;
+        flex: 1;
+        justify-content: center;
+    } .headerRight {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+        align-items: center;
+    } .logoutBtn {
+        padding: 6px 16px;
+        border: none;
+        border-radius: 8px;
+        background: #ff3b30;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: opacity 0.2s;
+        &:hover {
+            opacity: 0.8;
+        }}
+    @media (max-width: 768px) {
+        flex-wrap: wrap;
+        justify-content: center;
+        .headerCenter {
+        order: 3;
+        flex-basis: 100%;
+}}}
 
 .footerAuth {
     display: flex;
@@ -131,10 +142,11 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-height: 80vh;
     text-align: center;
     gap: 16px;
     padding: 20px;
+    min-height: 80vh;
+    .link {text-align: center}
     h1 {
         color: var(--theme_font_color);
         font-size: 48px;
@@ -147,13 +159,22 @@
             background: var(--theme_link);
             margin-left: 4px;
             animation: blink 0.8s step-end infinite;
-        }} p {
+        }} .fadeIn {
+        opacity: 0;
+        animation: fadeIn 1s ease forwards;
+    } p {
         color: var(--theme_font_color_primary);
         font-size: 18px;
         max-width: 500px;
-        opacity: 0;
-        animation: fadeIn 1s ease 1s forwards;
+    } .delay-1 {
+        animation-delay: 1.2s;
+    } .delay-2 {
+        animation-delay: 1.8s;
     } .homeActions {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
         opacity: 0;
         animation: fadeIn 1s ease 1.5s forwards;
         button {
@@ -168,6 +189,16 @@
             &:hover {
                 opacity: 0.85;
                 transform: scale(1.02);
+            }} .link {
+            background: transparent;
+            border: none;
+            color: var(--theme_link);
+            font-size: 16px;
+            cursor: pointer;
+            text-decoration: underline;
+            padding: 0 4px;
+            &:hover {
+            opacity: 0.8;
 }}}}
 
 @keyframes blink {

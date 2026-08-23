@@ -1,5 +1,6 @@
+'use client'
+
 import { useEffect } from "react"
-import { IVerificationEmail } from "@/src/dto"
 import { useAuth } from "@/src/hooks"
 import { TextError, Loader, TextMessage, ButtonLoading } from "../"
 import { useSearchParams } from "next/navigation"

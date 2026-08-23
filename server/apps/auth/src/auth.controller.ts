@@ -8,6 +8,7 @@ import { throttleLoginOptions, throttleRegisterOptions, throttleAdminOptions, th
 import { UUID } from 'crypto';
 import { githubGuard, googleGuard} from './common/helper/guards';
 import { OAuthUserDto, ResType, TokensType } from './common/helper/types/helperTypes';
+import { ACCESS_TOKEN, REFRESH_TOKEN } from './common/config/auth/jwt.config';
 
 @Controller('auth')
 export class AuthController {
@@ -88,7 +89,7 @@ export class AuthController {
   async googleCallback(@Req() req: any, @Res() res: any) {
     const user = (req as any).user as OAuthUserDto
     const tokens = await this.authService.googleCallback(user)
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
+    res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&expiresAccessToken${ACCESS_TOKEN.EXPIRES}&expiresRefreshToken${REFRESH_TOKEN.EXPIRES}`);
   }
 
   @Get('github')
@@ -100,7 +101,7 @@ export class AuthController {
   async githubCallback(@Req() req: any, @Res() res: any) {
     const user = (req as any).user as OAuthUserDto
     const tokens = await this.authService.githubCallback(user)
-    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}`);
+    res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&expiresAccessToken${ACCESS_TOKEN.EXPIRES}&expiresRefreshToken${REFRESH_TOKEN.EXPIRES}`);
   }
 
 // Admin

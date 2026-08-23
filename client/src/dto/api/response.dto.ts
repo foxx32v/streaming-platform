@@ -6,3 +6,9 @@ export interface IResponse<T = unknown> {
     timestamp: string
     path?: string
 }
+
+export interface IError {
+    message: string
+    statusCode: number
+    errors?: any
+}
