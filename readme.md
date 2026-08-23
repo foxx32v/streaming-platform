@@ -1,4 +1,4 @@
-## Streaming Platform
+# Streaming Platform
 
 Full-stack streaming platform with microservices architecture.
 
@@ -19,14 +19,20 @@ Backend (Server)
   - NestJS 11
   - PostgreSQL + TypeORM
   - Redis
-  - JWT Authentication
-  - Microservices
+  - RabbitMQ / Kafka
+  - JWT + OAuth2
+  - Docker
+  - Docker-compose
+  - Kubernetes
+  - AWS S3
+  - Grafana + Prometheus
 
 Web Client
   - Next.js 16
   - TypeScript
-  - Tailwind CSS 4
   - Zustand + React Query
+  - Zod
+  - SCSS + CSS Variables
 
 Mobile Client
   - React Native 0.86
@@ -55,16 +61,25 @@ Mobile Client
   npm run ios
 
 
+Docker
+------
+
+docker-compose up --build
+
+
 Features
 --------
 
+- User authentication (JWT + OAuth2)
 - Video upload and streaming
 - Playlists management
 - Subscription system
 - AI recommendations
-- User authentication
 - View history
+- Real-time chat (WebSockets)
 - Real-time analytics
+- Payment integration
+- Mobile support
 
 
 License
