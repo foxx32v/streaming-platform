@@ -20,6 +20,8 @@ export { FeedPage } from './B.Widgets/feedPage';
 export { ProfilePage } from './B.Widgets/profilePage';
 export { TrendingPage } from './B.Widgets/trendingPage';
 export { LogoutForm } from './B.Widgets/logoutForm';
+export { NavigationSidebar } from './B.Widgets/navigationSidebar';
+export { SettingsPage } from './B.Widgets/SettingsPage';
 // C //
 export { PageAuth } from './C.Pages/pageAuth';
 export { PageCallback } from './C.Pages/pageCallback'

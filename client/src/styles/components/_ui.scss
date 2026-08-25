@@ -178,3 +178,43 @@
     line-height: 1.5;
     text-align: center;
 }
+
+.switchOpenButtonClosed {
+    width: 40px;
+    background: transparent;
+    opacity: 100%;
+    position: absolute;
+    border: none;
+    color: var(--theme_font_color_primary);
+    font-size: 18px;
+    left: 220px;
+    top: 0px;
+    background-color: var(--theme_bg_card);
+    cursor: pointer;
+    transition: left 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+    &:hover {
+        background: var(--theme_hover);
+}}
+
+.switchOpenButton {
+    width: 40px;
+    background: transparent;
+    opacity: 100%;
+    position: absolute;
+    border: none;
+    color: var(--theme_font_color_primary);
+    font-size: 18px;
+    top: 0px;
+    left: 0px;
+    background-color: var(--theme_bg_card);
+    cursor: pointer;
+    transition: left 0.3s ease;
+    padding: 4px 8px;
+    border-radius: 4px;
+    z-index: 10;
+    &:hover {
+        background: var(--theme_hover);
+}}

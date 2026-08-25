@@ -5,7 +5,7 @@ export const GetCookie = (title: string) => {
 }
 
 export const SetCookie = (title: string, data: any, time?: number) => {
-    Cookies.set(title, data, { expires: time || undefined})
+    Cookies.set(title, data, { expires: time || undefined, path: '/'})
 }
 
 export const DeleteCookie = (title: string, path?: string) => {

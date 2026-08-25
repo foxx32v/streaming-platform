@@ -1,7 +1,7 @@
 'use client'
 
 import { useAuthStore, usePageStore } from "@/src/store"
-import { HeaderAuth, LoginForm, RegisterForm, CardVerifyEmail, HomePage, FooterAuth, FeedPage, ProfilePage, TrendingPage, CategoriesPage, AboutPage, LogoutForm } from "@/src/components"
+import { HeaderAuth, LoginForm, RegisterForm, CardVerifyEmail, HomePage, FooterAuth, FeedPage, ProfilePage, TrendingPage, CategoriesPage, AboutPage, LogoutForm, NavigationSidebar, SettingsPage } from "@/src/components"
 import { useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 
@@ -15,6 +15,17 @@ export const PageAuth = () => {
         if (token) {setPage('cardVerify')}
     }, [token, setPage])
 
+    useEffect(() => {
+        if (isAuth) setPage('feed')
+    }, [isAuth])
+
+    useEffect(() => {
+        const protectedPages = ['profile', 'trending', 'categories', 'subscriptions', 'library', 'history', 'watchLater', 'live', 'settings']
+        if (!isAuth && protectedPages.includes(currentPage)) {
+            setPage('login')
+        }
+    }, [isAuth, currentPage, setPage])
+
     const renderPage = () => {
     switch (currentPage) {
         case 'home': return <HomePage />
@@ -27,6 +38,7 @@ export const PageAuth = () => {
         case 'trending': return <TrendingPage />
         case 'categories': return <CategoriesPage />
         case 'about': return <AboutPage />
+        case 'settings': return <SettingsPage />
         default: return <HomePage />
         }
     }
@@ -35,6 +47,7 @@ export const PageAuth = () => {
         <div className="pageAuth">
             {!isAuth && <HeaderAuth/>}
             {renderPage()}
+            {isAuth && <NavigationSidebar/>}
             {!isAuth && <FooterAuth/>}
         </div>
     )

@@ -88,7 +88,9 @@ export class AuthController {
   @UseGuards(googleGuard)
   async googleCallback(@Req() req: any, @Res() res: any) {
     const user = (req as any).user as OAuthUserDto
-    const tokens = await this.authService.googleCallback(user)
+    const ip = req.ip || req.connection.remoteAddress
+    const userAgent = req.headers['user-agent'] || 'unknown'
+    const tokens = await this.authService.googleCallback(user, userAgent, ip)
     res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&expiresAccessToken${ACCESS_TOKEN.EXPIRES}&expiresRefreshToken${REFRESH_TOKEN.EXPIRES}`);
   }
 
@@ -100,7 +102,9 @@ export class AuthController {
   @UseGuards(githubGuard)
   async githubCallback(@Req() req: any, @Res() res: any) {
     const user = (req as any).user as OAuthUserDto
-    const tokens = await this.authService.githubCallback(user)
+    const ip = req.ip || req.connection.remoteAddress
+    const userAgent = req.headers['user-agent'] || 'unknown'
+    const tokens = await this.authService.githubCallback(user, userAgent, ip)
     res.redirect(`${process.env.FRONTEND_URL}/callback?accessToken=${tokens.accessToken}&refreshToken=${tokens.refreshToken}&expiresAccessToken${ACCESS_TOKEN.EXPIRES}&expiresRefreshToken${REFRESH_TOKEN.EXPIRES}`);
   }
 

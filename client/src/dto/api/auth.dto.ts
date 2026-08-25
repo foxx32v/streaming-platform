@@ -19,7 +19,7 @@ export interface ILogout {
 }
 
 export interface IRefresh {
-    refresh: string;
+    refreshToken: string;
 }
 
 export interface IForgetPassword {

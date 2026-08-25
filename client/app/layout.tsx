@@ -1,30 +1,41 @@
-import type { Metadata } from "next";
+'use client'
+
 import { Geist, Geist_Mono } from "next/font/google";
-import { Inter } from 'next/font/google'
 // @ts-ignore //
 import "./globals.scss";
+import { useEffect, useState } from "react";
+import { useAuthStore, useThemeStore } from "@/src/store";
 
 const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+    variable: "--font-geist-sans",
+    subsets: ["latin"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
+    variable: "--font-geist-mono",
+    subsets: ["latin"],
 });
 
-export const metadata: Metadata = {
-  title: "Streaming Platform",
-  description: "Video streaming platform",
-};
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+    const [mounted, setMounted] = useState(false)
+    const { atStart } = useThemeStore()
+    const { initAuth } = useAuthStore()
 
-export default function RootLayout({children,}: Readonly<{children: React.ReactNode}>) {
-  return (
-    <html lang="ru" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">
-        {children}
-      </body>
-    </html>
-  );
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        initAuth()
+    }, [initAuth])
+
+    useEffect(() => {atStart()}, [atStart])
+
+    return (
+        <html lang="ru" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+            <body className="min-h-full flex flex-col">
+                {mounted == true && children}
+            </body>
+        </html>
+    );
 }

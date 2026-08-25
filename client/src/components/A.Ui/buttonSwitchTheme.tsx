@@ -1,20 +1,24 @@
 'use client'
 
-import { useState, useEffect } from "react"
+import { useThemeStore } from "@/src/store"
+import { useEffect } from "react"
 
 export const ButtonSwitchTheme = () => {
-    const [dark, setDark] = useState(true)
-    const SwitchTheme = () => setDark(!dark)
+    const { currentTheme, setTheme } = useThemeStore()
+
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
-    }, [dark])
+        document.documentElement.setAttribute('data-theme', currentTheme)
+    }, [currentTheme])
+    const toggleTheme = () => {
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
+        setTheme(newTheme)
+    }
     return (
         <div className='buttonSwitchTheme'>
-        <button 
-        className={dark ? 'on' : 'off'}
-        onClick={SwitchTheme}
-        >
-        {dark ? '🌙' : '☀️'}
+        <button
+            className={currentTheme === 'dark' ? 'on' : 'off'}
+            onClick={toggleTheme}>
+            {currentTheme === 'dark' ? '🌙' : '☀️'}
         </button>
         </div>
     )

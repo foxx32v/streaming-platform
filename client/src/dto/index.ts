@@ -13,5 +13,6 @@ export * from './components/A.Ui/buttonSetStateProps'
 // C.Pages
 
 // STORE
-export * from './store/pageStore';
-export * from './store/isAuthStore';
+export * from './store/pageStore.dto';
+export * from './store/isAuthStore.dto';
+export * from './store/themeStore.dto'

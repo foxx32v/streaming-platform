@@ -55,14 +55,16 @@ export class AuthService {
   async refresh(dto: RefreshDto, ip: string) {
     let payload: any
     try {
-    payload = jwtService.verifyRefreshToken(dto.refresh)
+    payload = jwtService.verifyRefreshToken(dto.refreshToken)
     } catch (error) {throw new HttpException('Invalid refresh token', 401)}
-    const session = await sessionsRepository.GetSessionByRefreshToken(dto.refresh)
+    const session = await sessionsRepository.GetSessionByRefreshToken(dto.refreshToken)
     if (!session) throw new HttpException('Session not found', 404)
     const user = await userRepository.GetUserById(payload.id)
     if (!user) throw new HttpException('User not found', 404)
     const tokens = jwtService.generateTokens({id: user.id, email: user.email, role: user.role})
     await userRepository.UpdateTokens(user.id, tokens)
+    const expiresAt = new Date(Date.now() + REFRESH_TOKEN.EXPIRES)
+    await sessionsRepository.CreateSession(user.id, tokens.refreshToken, session.userAgent || 'unknown', ip, expiresAt)
     return Responser(200, 'Tokens refreshed successfully', tokens)
   }
 
@@ -113,15 +115,15 @@ export class AuthService {
     return Responser(200, 'Password changed successfully')
   }
 
-  async googleCallback(user: any) {
-    return this.handleOAuthLogin(user, 'google')
+  async googleCallback(user: any, userAgent: string, ip: string) {
+    return this.handleOAuthLogin(user, 'google', userAgent, ip)
   }
 
-  async githubCallback(user: any) {
-    return this.handleOAuthLogin(user, 'github')
+  async githubCallback(user: any, userAgent: string, ip: string) {
+    return this.handleOAuthLogin(user, 'github', userAgent, ip)
   }
 
-  private async handleOAuthLogin(profile: any, provider: string): Promise<TokensType> {
+  private async handleOAuthLogin(profile: any, provider: string, userAgent: string, ip: string): Promise<TokensType> {
     let user = await userRepository.GetUserByEmail(profile.email)
     if (!user) {
         const userName = profile.username || profile.email.split('@')[0]
@@ -132,6 +134,8 @@ export class AuthService {
     const payload = { id: user.id, email: user.email, role: user.role }
     const tokens: TokensType = jwtService.generateTokens(payload)
     await userRepository.UpdateTokens(user.id, tokens)
+    const expiresAt = new Date(Date.now() + REFRESH_TOKEN.EXPIRES)
+    await sessionsRepository.CreateSession(user.id, tokens.refreshToken, userAgent, ip, expiresAt)
     return tokens
   }
 

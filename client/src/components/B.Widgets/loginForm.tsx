@@ -6,6 +6,7 @@ import { useAuth } from '@/src/hooks/auth.hook';
 import { ILogin } from '@/src/dto';
 import { usePageStore } from '@/src/store';
 import { useAuthStore } from '@/src/store/isAuth.store';
+import { SetCookie } from '@/src/utils';
 
 export const LoginForm = () => {
     const { setPage } = usePageStore()
@@ -14,7 +15,12 @@ export const LoginForm = () => {
     const { setAuth } = useAuthStore()
 
     const onSubmit = async (body: ILogin) => {
-        await Login(body)
+        const { data } = await Login(body)
+        const { accessToken, refreshToken } = data
+        if (accessToken && refreshToken) {
+        SetCookie('accessToken', accessToken, 1/96)
+        SetCookie('refreshToken', refreshToken, 7)
+        }
         setAuth(true)
         setPage('feed')
     }
