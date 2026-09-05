@@ -1,11 +1,8 @@
-import { UUID } from "crypto";
 import { db } from "../helper/db/db";
-import { UserDto } from "../dto/db/user.dto";
-import { ColorType, TokensType } from "../helper/types/helperTypes";
-import { EmailDto, UserIdDto } from "../dto/api";
+import { TokensType } from "../helper/types/helperTypes";
 
 class UserRepository {
-    async CreateUser(email: string, passwordHash: string, userName: string, linkActivate: string, avatarColor: ColorType) {
+    async CreateUser(email: string, passwordHash: string, userName: string, linkActivate: string, avatarColor: string) {
         await db.query(`
             INSERT INTO users
             (email, passwordHash, userName, linkactivate, avatarColor)
@@ -204,7 +201,7 @@ class UserRepository {
         [id, reason])
     }
 
-    async CreateUserOAuth(email: string, passwordHash: string, userName: string, provider: string, avatar: string, avatarColor: ColorType) {
+    async CreateUserOAuth(email: string, passwordHash: string, userName: string, provider: string, avatar: string, avatarColor: string) {
         const result = await db.query(`
             INSERT INTO users
             (email, passwordHash, userName, provider, avatar, avatarColor, isActivate)

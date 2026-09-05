@@ -1,9 +1,6 @@
-import { UUID } from "crypto";
-import { SessionIdDto, UserIdDto } from "../api";
-
 export class SessionDto {
-    'id': SessionIdDto;
-    'userId': UserIdDto;
+    'id': string;
+    'userId': string;
     'refreshToken': string;
     'userAgent': string;
     'ip': string;

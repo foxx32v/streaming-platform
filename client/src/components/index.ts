@@ -21,7 +21,9 @@ export { ProfilePage } from './B.Widgets/profilePage';
 export { TrendingPage } from './B.Widgets/trendingPage';
 export { LogoutForm } from './B.Widgets/logoutForm';
 export { NavigationSidebar } from './B.Widgets/navigationSidebar';
-export { SettingsPage } from './B.Widgets/SettingsPage';
+export { SettingsPage } from './B.Widgets/settingsPage';
+export { ForgetPasswordForm } from './B.Widgets/forgetPasswordForm';
+export { ForgetEmailForm } from './B.Widgets/forgetEmailForm';
 // C //
 export { PageAuth } from './C.Pages/pageAuth';
 export { PageCallback } from './C.Pages/pageCallback'

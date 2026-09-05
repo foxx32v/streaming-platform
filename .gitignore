@@ -15,48 +15,17 @@ dist/
 build/
 .next/
 out/
-.nuxt/
 .cache/
-
-# Testing
-coverage/
-.nyc_output/
 
 # IDE
 .vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
 
 # Logs
 logs/
 *.log
 
-# Uploads
-uploads/
-public/uploads/
-media/
-
-# Temp
-tmp/
-temp/
-
-# Docker
-*.pid
-*.seed
-*.pid.lock
-
-# OS
-Thumbs.db
-Desktop.ini
-
-# Certs
-*.pem
-*.key
-*.crt
-*.p12
+# Kubernetes
+k8s/secrets.yaml
 
 # Redis
 dump.rdb
@@ -70,3 +39,6 @@ mobile/ios/Pods/
 mobile/android/.gradle/
 mobile/android/app/build/
 mobile/android/build/
+
+# Scripts
+.scripts/

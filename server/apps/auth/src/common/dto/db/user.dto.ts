@@ -1,10 +1,8 @@
 import { IsEmail, isNotEmpty, IsNotEmpty, IsUUID } from "class-validator";
-import { UUID } from "crypto";
-import { ColorType } from "../../helper/types/helperTypes";
 import { IsPassword, IsUserName } from "../../decorators/";
 
 export class UserDto {
-    'id': UUID
+    'id': string
     @IsEmail()
     @IsNotEmpty()
     'email': string
@@ -16,7 +14,7 @@ export class UserDto {
     'refreshToken': string
     'accessToken': string
     'role': string
-    'avatarColor': ColorType
+    'avatarjColor': string
     'isActivate': boolean
     'isBlocked': boolean
     'status': string

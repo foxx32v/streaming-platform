@@ -6,13 +6,10 @@ import { GetRandomColor } from './common/helper/methods/colorMethods.helper';
 import { Responser } from './common/helper/utils/responser.util';
 import { mailer } from './common/helper/mailer/mailer.util';
 import * as bcrypt from 'bcrypt';
-import { UUID } from "crypto";
 import { jwtService } from './common/helper/jwt/jwt.helper';
 import sessionsRepository from './common/repository/sessions.repository';
 import { REFRESH_TOKEN } from './common/config/auth/jwt.config';
-import { UserDto } from './common/dto/db/user.dto';
 import { TokensType } from './common/helper/types/helperTypes';
-import { MAILER_CONFIG } from './common/config/utils/mailer.config';
 @Injectable()
 export class AuthService {
   async register(dto: RegisterDto, ip: string) {

@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+  namespace: perepihotic
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - name: auth
+        image: perepihoticwatch/auth:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+        - name: PORT
+          value: "3000"
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: auth
+        - name: DB_USER
+          value: postgres
+        - name: DB_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: REFRESH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: refresh-secret
+        - name: ACCESS_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: secret
+        - name: MAIL_HOST
+          valueFrom:
+            secretKeyRef:
+              name: email-secret
+              key: host
+        - name: MAIL_PORT
+          valueFrom:
+            secretKeyRef:
+              name: email-secret
+              key: port
+        - name: MAIL_SECURE
+          valueFrom:
+            secretKeyRef:
+              name: email-secret
+              key: secure
+        - name: MAIL_USER
+          valueFrom:
+            secretKeyRef:
+              name: email-secret
+              key: user
+        - name: MAIL_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: email-secret
+              key: password
+        - name: MAIL_FROM
+          valueFrom:
+            secretKeyRef:
+              name: email-secret
+              key: from
+        - name: GOOGLE_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secret
+              key: google-client-id
+        - name: GOOGLE_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secret
+              key: google-client-secret
+        - name: GOOGLE_CALLBACK_URL
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secret
+              key: google-callback-url
+        - name: GITHUB_CLIENT_ID
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secret
+              key: github-client-id
+        - name: GITHUB_CLIENT_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secret
+              key: github-client-secret
+        - name: GITHUB_CALLBACK_URL
+          valueFrom:
+            secretKeyRef:
+              name: oauth-secret
+              key: github-callback-url
+        - name: GATEWAY_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: gateway-url

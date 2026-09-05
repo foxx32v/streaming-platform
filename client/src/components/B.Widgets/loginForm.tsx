@@ -42,7 +42,7 @@ export const LoginForm = () => {
             <button onClick={() => setPage('register')} className='link'>I have not account</button>
             <ButtonLoading isLoading={isLoading} type='submit' title='Login' loadingTitle='Loading...'/>
             {statusCode === 403 && <TextError error={error}/>}
-            {statusCode === 200 && <TextMessage message={message}/>}   
+            {statusCode === 200 && <TextMessage message={`${message}`}/>}   
             <div className="oauthButtons">
             <button onClick={SendGoogleLogin} className="googleBtn">
                 Sign in with Google

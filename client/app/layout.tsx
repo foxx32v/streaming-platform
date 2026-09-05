@@ -1,7 +1,6 @@
 'use client'
 
 import { Geist, Geist_Mono } from "next/font/google";
-// @ts-ignore //
 import "./globals.scss";
 import { useEffect, useState } from "react";
 import { useAuthStore, useThemeStore } from "@/src/store";
@@ -34,7 +33,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="ru" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
             <body className="min-h-full flex flex-col">
-                {mounted == true && children}
+                {mounted && children}
             </body>
         </html>
     );

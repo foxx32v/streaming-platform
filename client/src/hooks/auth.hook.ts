@@ -1,10 +1,20 @@
 import { useState } from "react"
 import { authApi } from "../api"
-import { IChangePassword, IForgetPassword, ILogin, ILogout, IPagination, IRefresh, IRegistration, IResendVerification, IResetPassword, IResponse, IVerificationEmail } from "../dto"
-import { IError } from '../dto'
+import { IChangePassword, IForgetPassword, ILogin, ILogout, IPagination, IRefresh, IRegistration, IResendVerification, IResetPassword, IResponse, IVerificationEmail, IError, IRegisterResponse, ILoginResponse, IRefreshResponse, IGetAllUsersResponse, IVerifyTokenResponse, IValidateTokenResponse, userDto, sessionDto } from "../dto"
+
+type AuthData =
+    | IRegisterResponse
+    | ILoginResponse
+    | IRefreshResponse
+    | IGetAllUsersResponse
+    | userDto
+    | sessionDto[]
+    | IVerifyTokenResponse
+    | IValidateTokenResponse
+    | null
 
 export const useAuth = () => {
-    const [data, SetData] = useState<unknown>(null)
+    const [data, SetData] = useState<AuthData>(null)
     const [message, SetMessage] = useState<string|null>(null)
     const [error, SetError] = useState<null|string>(null)
     const [isLoading, SetIsLoading] = useState<boolean>(false)
@@ -23,7 +33,7 @@ export const useAuth = () => {
         SetIsLoading(false)
         SetMessage(res.message ?? null)
         SetError(null)
-        SetData(res.data ?? null)
+        SetData(res.data as AuthData)
         SetStatus('success')
         SetStatusCode(res.statusCode)
     }
@@ -36,7 +46,7 @@ export const useAuth = () => {
         SetStatusCode(statusCode??null)
     }
 
-    const Register = async (body: IRegistration) => {
+    const Register = async (body: IRegistration): Promise<IResponse<IRegisterResponse>> => {
         try {
             Start(); const res = await authApi.Register(body)
             End(res); return res
@@ -46,7 +56,7 @@ export const useAuth = () => {
         }
     }
 
-    const Login = async (body: ILogin) => {
+    const Login = async (body: ILogin): Promise<IResponse<ILoginResponse>> => {
         try {
             Start(); const res = await authApi.Login(body)
             End(res); return res
@@ -56,7 +66,7 @@ export const useAuth = () => {
         }
     }
 
-    const Logout = async () => {
+    const Logout = async (): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.Logout()
             End(res); return res
@@ -66,7 +76,7 @@ export const useAuth = () => {
         }
     }
 
-    const Refresh = async (body: IRefresh) => {
+    const Refresh = async (body: IRefresh): Promise<IResponse<IRefreshResponse>> => {
         try {
             Start(); const res = await authApi.Refresh(body)
             End(res); return res
@@ -76,7 +86,7 @@ export const useAuth = () => {
         }
     }
 
-    const ChangePassword = async (body: IChangePassword) => {
+    const ChangePassword = async (body: IChangePassword): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.ChangePassword(body)
             End(res); return res
@@ -86,7 +96,7 @@ export const useAuth = () => {
         }
     }
 
-    const VerifyEmail = async (body: IVerificationEmail) => {
+    const VerifyEmail = async (body: IVerificationEmail): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.VerifyEmail(body)
             End(res); return res
@@ -96,7 +106,7 @@ export const useAuth = () => {
         }
     }
 
-    const ResendVerification = async (body: IResendVerification) => {
+    const ResendVerification = async (body: IResendVerification): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.ResendVerification(body)
             End(res); return res
@@ -106,7 +116,7 @@ export const useAuth = () => {
         }
     }
 
-    const ForgetPassword = async (body: IForgetPassword) => {
+    const ForgetPassword = async (body: IForgetPassword): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.ForgetPassword(body)
             End(res); return res
@@ -116,7 +126,7 @@ export const useAuth = () => {
         }
     }
 
-    const ResetPassword = async (body: IResetPassword) => {
+    const ResetPassword = async (body: IResetPassword): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.ResetPassword(body)
             End(res); return res
@@ -126,7 +136,7 @@ export const useAuth = () => {
         }
     }
 
-    const GetAllUsers = async (params: IPagination) => {
+    const GetAllUsers = async (params: IPagination): Promise<IResponse<IGetAllUsersResponse>> => {
         try {
             Start(); const res = await authApi.GetAllUsers(params)
             End(res); return res
@@ -136,7 +146,7 @@ export const useAuth = () => {
         }
     }
 
-    const GetUserById = async (userId: string) => {
+    const GetUserById = async (userId: string): Promise<IResponse<userDto>> => {
         try {
             Start(); const res = await authApi.GetUserById(userId)
             End(res); return res
@@ -146,7 +156,7 @@ export const useAuth = () => {
         }
     }
 
-    const ChangeUserRole = async (userId: string, role: string) => {
+    const ChangeUserRole = async (userId: string, role: string): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.ChangeUserRole(userId, role)
             End(res); return res
@@ -156,7 +166,7 @@ export const useAuth = () => {
         }
     }
 
-    const BlockUser = async (userId: string, reason?: string) => {
+    const BlockUser = async (userId: string, reason?: string): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.BlockUser(userId, reason)
             End(res); return res
@@ -166,7 +176,7 @@ export const useAuth = () => {
         }
     }
 
-    const UnblockUser = async (userId: string) => {
+    const UnblockUser = async (userId: string): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.UnblockUser(userId)
             End(res); return res
@@ -176,7 +186,7 @@ export const useAuth = () => {
         }
     }
 
-    const GetSessions = async () => {
+    const GetSessions = async (): Promise<IResponse<sessionDto[]>> => {
         try {
             Start(); const res = await authApi.GetSessions()
             End(res); return res
@@ -186,7 +196,7 @@ export const useAuth = () => {
         }
     }
 
-    const RevokeSession = async (sessionId: string) => {
+    const RevokeSession = async (sessionId: string): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.RevokeSession(sessionId)
             End(res); return res
@@ -196,7 +206,7 @@ export const useAuth = () => {
         }
     }
 
-    const RevokeAllSessions = async () => {
+    const RevokeAllSessions = async (): Promise<IResponse> => {
         try {
             Start(); const res = await authApi.RevokeAllSessions()
             End(res); return res
@@ -206,7 +216,7 @@ export const useAuth = () => {
         }
     }
 
-    const VerifyToken = async (token: string) => {
+    const VerifyToken = async (token: string): Promise<IResponse<IVerifyTokenResponse>> => {
         try {
             Start(); const res = await authApi.VerifyToken(token)
             End(res); return res
@@ -216,7 +226,7 @@ export const useAuth = () => {
         }
     }
 
-    const ValidateToken = async (token: string) => {
+    const ValidateToken = async (token: string): Promise<IResponse<IValidateTokenResponse>> => {
         try {
             Start(); const res = await authApi.ValidateToken(token)
             End(res); return res
@@ -226,7 +236,7 @@ export const useAuth = () => {
         }
     }
 
-    const GoogleLogin = async () => {
+    const GoogleLogin = async (): Promise<void> => {
         try {
             Start(); authApi.GoogleLogin(); End({} as IResponse)
         } catch (error: unknown) {
@@ -235,7 +245,7 @@ export const useAuth = () => {
         }
     }
 
-    const GithubLogin = async () => {
+    const GithubLogin = async (): Promise<void> => {
         try {
             Start(); authApi.GithubLogin(); End({} as IResponse)
         } catch (error: unknown) {

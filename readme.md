@@ -9,7 +9,8 @@ Project Structure
 streaming-platform/
 ├── server/         NestJS backend
 ├── client/         Next.js frontend
-└── mobile/         React Native app
+├── mobile/         React Native app
+└── k&b/            MiniKube DevOps
 
 
 Technology Stack
@@ -32,7 +33,7 @@ Web Client
   - TypeScript
   - Zustand + React Query
   - Zod
-  - SCSS + CSS Variables
+  - SCSS
 
 Mobile Client
   - React Native 0.86
@@ -60,26 +61,10 @@ Mobile Client
   npm install
   npm run ios
 
-
-Docker
-------
-
-docker-compose up --build
-
-
 Features
 --------
 
 - User authentication (JWT + OAuth2)
-- Video upload and streaming
-- Playlists management
-- Subscription system
-- AI recommendations
-- View history
-- Real-time chat (WebSockets)
-- Real-time analytics
-- Payment integration
-- Mobile support
 
 
 License

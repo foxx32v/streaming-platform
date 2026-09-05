@@ -16,7 +16,8 @@ export const RegisterForm = () => {
     }
 
     const ResendVerifyEmail = async () => {
-        await ResendVerification({ email: (data as any).email })
+        const email = (data as { email: string }).email
+        await ResendVerification({ email })
     }
 
     return (

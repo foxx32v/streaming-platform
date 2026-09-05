@@ -15,6 +15,20 @@ export type PageStoreType =
     | 'watchLater'
     | 'live'
     | 'settings'
+    | 'forgetPassword'
+    | 'forgetEmail'
+    | 'about'
+    | 'blog'
+    | 'faq'
+    | 'support'
+    | 'privacy'
+    | 'terms'
+    | 'cookies'
+    | 'contact'
+    | 'careers'
+    | 'developers'
+    | 'api'
+    | 'status'
 
 export interface IPageStore {
     currentPage: PageStoreType

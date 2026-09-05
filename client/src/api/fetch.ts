@@ -2,6 +2,7 @@ import axios from "axios";
 import { GetCookie, SetCookie, DeleteCookie } from "../utils";
 import { GLOBAL_API } from "../configs";
 import { useAuthStore, usePageStore } from "../store";
+import { ApiError } from "../dto";
 
 const axiosInstance = axios.create({
     baseURL: GLOBAL_API.serverUrl,
@@ -13,31 +14,32 @@ axiosInstance.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config
         if (error.response?.status === 401 && !originalRequest._retry) {
-            originalRequest._retry = true
-            try {
-                const refreshToken = GetCookie('refreshToken')
-                if (!refreshToken) {
-                    redirectToLogin()
-                    return Promise.reject(error)
-                }
-                const { data } = await axios.post(
-                    `${GLOBAL_API.serverUrl}/auth/refresh`,
-                    { refreshToken }
-                )
-                if (data?.accessToken && data?.refreshToken) {
-                    SetCookie('accessToken', data.accessToken, 1/96)
-                    SetCookie('refreshToken', data.refreshToken, 7)
-                    originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
-                    return axiosInstance(originalRequest)
-                } else {
-                    redirectToLogin()
-                    return Promise.reject(error)
-                }} catch (refreshError) {
-                redirectToLogin()
-                return Promise.reject(refreshError)
-            }} return Promise.reject(error)
-        }
-)
+        originalRequest._retry = true
+        try {
+        const refreshToken = GetCookie('refreshToken')
+        if (!refreshToken) {redirectToLogin(); return Promise.reject(error)}
+        const { data } = await axios.post(`${GLOBAL_API.serverUrl}/auth/refresh`,{ refreshToken })
+        if (data?.accessToken && data?.refreshToken) {
+            SetCookie('accessToken', data.accessToken, 1/96)
+            SetCookie('refreshToken', data.refreshToken, 7)
+            originalRequest.headers.Authorization = `Bearer ${data.accessToken}`
+            return axiosInstance(originalRequest)
+            } else {
+            redirectToLogin()
+            return Promise.reject(error)
+            }} catch (refreshError) {
+        redirectToLogin()
+        return Promise.reject(refreshError)
+        }} return Promise.reject(error)
+})
+
+const AxiosError = (error: any) => {
+    if (axios.isAxiosError(error)) {
+        const message = error.response?.data?.message || error.message
+        const statusCode = error.response?.status || 500
+        throw new ApiError( message, statusCode )
+    } throw error
+}
 
 const redirectToLogin = () => {
     DeleteCookie('accessToken')
@@ -61,13 +63,7 @@ export const AxiosPost = async <T>(url: string, body: unknown, isAuthToken: bool
         const headers = await CreateHeaders(isAuthToken)
         const { data } = await axios.post<T>(`${GLOBAL_API.serverUrl}${url}`, body, { headers })
         return data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message || error.message
-            const statusCode = error.response?.status || 500
-            throw { message, statusCode } as any
-        } throw error
-    }
+    } catch (error) {return AxiosError(error)}
 }
 
 export const AxiosGet = async <T>(url: string, isAuthToken: boolean = false): Promise<T> => {
@@ -75,13 +71,7 @@ export const AxiosGet = async <T>(url: string, isAuthToken: boolean = false): Pr
         const headers = await CreateHeaders(isAuthToken)
         const { data } = await axios.get<T>(`${GLOBAL_API.serverUrl}${url}`, { headers })
         return data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message || error.message
-            const statusCode = error.response?.status || 500
-            throw { message, statusCode } as any
-        } throw error
-    }
+    } catch (error) {return AxiosError(error)}
 }
 
 export const AxiosDelete = async <T>(url: string, isAuthToken: boolean = false): Promise<T> => {
@@ -89,13 +79,7 @@ export const AxiosDelete = async <T>(url: string, isAuthToken: boolean = false):
         const headers = await CreateHeaders(isAuthToken)
         const { data } = await axios.delete<T>(`${GLOBAL_API.serverUrl}${url}`, { headers })
         return data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message || error.message
-            const statusCode = error.response?.status || 500
-            throw { message, statusCode } as any
-        } throw error
-    }
+    } catch (error) {return AxiosError(error)}
 }
 
 export const AxiosPatch = async <T>(url: string, body: unknown, isAuthToken: boolean = false): Promise<T> => {
@@ -103,13 +87,7 @@ export const AxiosPatch = async <T>(url: string, body: unknown, isAuthToken: boo
         const headers = await CreateHeaders(isAuthToken)
         const { data } = await axios.patch<T>(`${GLOBAL_API.serverUrl}${url}`, body, { headers })
         return data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message || error.message
-            const statusCode = error.response?.status || 500
-            throw { message, statusCode } as any
-        } throw error
-    }
+    } catch (error) {return AxiosError(error)}
 }
 
 export const AxiosPut = async <T>(url: string, body: unknown, isAuthToken: boolean = false): Promise<T> => {
@@ -117,11 +95,5 @@ export const AxiosPut = async <T>(url: string, body: unknown, isAuthToken: boole
         const headers = await CreateHeaders(isAuthToken)
         const { data } = await axios.put<T>(`${GLOBAL_API.serverUrl}${url}`, body, { headers })
         return data;
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            const message = error.response?.data?.message || error.message
-            const statusCode = error.response?.status || 500
-            throw { message, statusCode } as any
-        } throw error
-    }
+    } catch (error) {return AxiosError(error)}
 }

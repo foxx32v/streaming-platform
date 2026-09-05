@@ -1,8 +1,8 @@
 export interface IResponse<T = unknown> {
     statusCode: number
     message: string
-    data: any
-    errors: any
+    data: T
+    errors: string | null
     timestamp: string
     path?: string
 }
@@ -10,5 +10,5 @@ export interface IResponse<T = unknown> {
 export interface IError {
     message: string
     statusCode: number
-    errors?: any
+    errors?: string | null
 }
