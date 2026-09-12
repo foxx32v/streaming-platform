@@ -1,11 +1,9 @@
 'use client'
 
-import { usePageStore } from "@/src/store"
 import { Logo, ButtonSwitchTheme, ButtonSetState } from "../"
 import { useState } from "react"
 
 export const NavigationSidebar = () => {
-    const { currentPage } = usePageStore()
     const [isOpen, setOpen] = useState(true)
 
     const SwitchOpenState = () => {

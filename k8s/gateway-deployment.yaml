@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+  namespace: perepihotic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+      - name: gateway
+        image: perepihoticwatch/gateway:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3002
+        env:
+        - name: GATEWAY_PORT
+          value: "3002"
+        - name: NODE_ENV
+          value: "production"
+        - name: FRONTEND_URL
+          value: "http://client:3001"
+        - name: GATEWAY_URL
+          value: "http://gateway:3002"
+        - name: AUTH_URL
+          value: "http://auth:3000"
+        - name: USERS_URL
+          value: "http://users:3003"
+        - name: STREAM_URL
+          value: "http://stream:3003"

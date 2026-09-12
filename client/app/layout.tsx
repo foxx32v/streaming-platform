@@ -3,7 +3,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.scss";
 import { useEffect, useState } from "react";
-import { useAuthStore, useThemeStore } from "@/src/store";
+import { useAuthStore, usePageStore, useThemeStore } from "@/src/store";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -17,18 +17,16 @@ const geistMono = Geist_Mono({
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     const [mounted, setMounted] = useState(false)
-    const { atStart } = useThemeStore()
+    const { initTheme } = useThemeStore()
     const { initAuth } = useAuthStore()
+    const { initPage } = usePageStore()
 
     useEffect(() => {
         setMounted(true)
-    }, [])
-
-    useEffect(() => {
+        initTheme()
         initAuth()
-    }, [initAuth])
-
-    useEffect(() => {atStart()}, [atStart])
+        initPage()
+    }, [])
 
     return (
         <html lang="ru" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>

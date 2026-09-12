@@ -16,8 +16,6 @@ export type PageStoreType =
     | 'live'
     | 'settings'
     | 'forgetPassword'
-    | 'forgetEmail'
-    | 'about'
     | 'blog'
     | 'faq'
     | 'support'
@@ -29,9 +27,12 @@ export type PageStoreType =
     | 'developers'
     | 'api'
     | 'status'
+    | 'forgetPasswordStageTwo'
+    | 'resetEmail'
 
 export interface IPageStore {
     currentPage: PageStoreType
     setPage: (page: PageStoreType) => void
     togglePage: (page: PageStoreType) => void
+    initPage: () => void
 }

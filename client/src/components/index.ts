@@ -23,7 +23,8 @@ export { LogoutForm } from './B.Widgets/logoutForm';
 export { NavigationSidebar } from './B.Widgets/navigationSidebar';
 export { SettingsPage } from './B.Widgets/settingsPage';
 export { ForgetPasswordForm } from './B.Widgets/forgetPasswordForm';
-export { ForgetEmailForm } from './B.Widgets/forgetEmailForm';
+export { ResetEmailForm } from './B.Widgets/resetEmailForm';
+export { ForgetPasswordStageTwo } from './B.Widgets/forgetPasswordStageTwo';
 // C //
 export { PageAuth } from './C.Pages/pageAuth';
 export { PageCallback } from './C.Pages/pageCallback'

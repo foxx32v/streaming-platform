@@ -5,5 +5,5 @@ export interface IThemeStore {
     currentTheme: themeType
     getTheme: () => themeType
     setTheme: (theme: themeType) => void
-    atStart: () => void
+    initTheme: () => void
 }

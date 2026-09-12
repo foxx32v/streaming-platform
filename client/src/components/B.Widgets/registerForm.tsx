@@ -3,12 +3,13 @@
 import { ButtonLoading, FormInput, Loader, TextError, TextMessage } from '../';
 import { useRegisterForm } from '@/src/utils/auth.validator';
 import { useAuth } from '@/src/hooks/auth.hook';
-import { IRegistration, IResendVerification } from '@/src/dto';
+import { IRegistration } from '@/src/dto';
 import { usePageStore } from '@/src/store';
+import { useEffect } from 'react';
 
 export const RegisterForm = () => {
     const { setPage } = usePageStore()
-    const { register, handleSubmit, formState: { errors } } = useRegisterForm()
+    const { register, handleSubmit, getValues, formState: { errors } } = useRegisterForm()
     const { Register, ResendVerification, isLoading, error, message, status, data, statusCode } = useAuth()
 
     const onSubmit = async (body: IRegistration) => {
@@ -16,8 +17,8 @@ export const RegisterForm = () => {
     }
 
     const ResendVerifyEmail = async () => {
-        const email = (data as { email: string }).email
-        await ResendVerification({ email })
+        const email = getValues('email')
+        await ResendVerification({email})
     }
 
     return (
@@ -28,8 +29,8 @@ export const RegisterForm = () => {
             <FormInput name='password' label='Password' type='password' register={register} error={errors.password} />
             <FormInput name='doublePassword' label='Confirm Password' type='password' register={register} error={errors.doublePassword} />
             <button onClick={() => setPage('login')} className='link'>I have account</button>
-            {!message && <ButtonLoading isLoading={isLoading} type='submit' title='Register' loadingTitle='Loading...'/>}
-            {message && <ButtonLoading isLoading={isLoading} type='button' title='Send the email again' loadingTitle='Loading...' onClick={() => ResendVerifyEmail()}/>}
+            {<ButtonLoading isLoading={isLoading} type='submit' title='Register' loadingTitle='Loading...'/>}
+            {statusCode == 409 && <ButtonLoading isLoading={isLoading} type='button' title='Send the email again' loadingTitle='Loading...' onClick={() => ResendVerifyEmail()}/>}
             {error && <TextError error={error}/>}
             {message && <TextMessage message={message}/>}
         </form>

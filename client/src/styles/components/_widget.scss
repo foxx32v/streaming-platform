@@ -1,6 +1,7 @@
 @import '../core/variables';
 
-.formRegistration, .formLogin, .cardVerifyEmail, .logoutForm {
+.formRegistration, .formLogin, .cardVerifyEmail,
+.logoutForm, .forgetEmailForm, .forgetPasswordForm {
     display: flex;
     flex-direction: column;
     gap: 16px;
@@ -276,6 +277,7 @@
     position: fixed;
     left: 0px;
     top: 0px;
+    transform: scale(0,1);
     height: 100vh;
     transition: 0.3s ease;
     opacity: 0%;

@@ -1,5 +1,6 @@
 :root {
     --theme_bg: #f5f5f7;
+    --theme_segment_bg: #555de4;
     --theme_bg_card: #ffffff;
     --theme_font_color: #1a1a1e;
     --theme_font_color_primary: #3a3a3e;
@@ -12,6 +13,7 @@
 
 [data-theme="dark"] {
     --theme_bg: #0a0a0a;
+    --theme_segment_bg: #343434;
     --theme_bg_card: #1c1c1e;
     --theme_font_color: #f5f5f7;
     --theme_font_color_primary: #aeaeb2;
@@ -24,6 +26,7 @@
 
 [data-theme="midnight"] {
     --theme_bg: #0b0e14;
+    --theme_segment_bg: #4a2982;
     --theme_bg_card: #14181f;
     --theme_font_color: #e8edf5;
     --theme_font_color_primary: #8a9bb5;

@@ -5,4 +5,5 @@ export const URL_CONFIG = {
     GATEWAY: process.env.GATEWAY_URL || 'http://localhost:3002',
     AUTH: process.env.AUTH_URL || 'http://localhost:3000',
     USERS: process.env.USERS_URL || 'http://localhost:3003',
+    STREAM: process.env.STREAM_URL || 'http://localhost:3003',
 }

@@ -6,6 +6,6 @@ import { ServiceInit } from './common/helper/service.init';
 async function bootstrap() {
     const app = await NestFactory.create(AuthModule);
     await ServiceInit()
-    await app.listen(process.env.AUTH_PORT ?? 3002);
+    await app.listen(process.env.AUTH_PORT ?? 3000, '0.0.0.0');
 }
 bootstrap();

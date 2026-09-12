@@ -10,7 +10,7 @@ export const useThemeStore = create<IThemeStore>((set, get) => ({
         document.documentElement.setAttribute('data-theme', theme)
         setItem('currentTheme', get().currentTheme)
     },
-    atStart: () => {
+    initTheme: () => {
         const theme: themeType = get().currentTheme || 'dark'
         document.documentElement.setAttribute('data-theme', theme)}
 }));

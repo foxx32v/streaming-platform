@@ -13,6 +13,7 @@ spec:
       labels:
         app: auth
     spec:
+      enableServiceLinks: false
       containers:
       - name: auth
         image: perepihoticwatch/auth:latest
@@ -20,7 +21,7 @@ spec:
         ports:
         - containerPort: 3000
         env:
-        - name: PORT
+        - name: AUTH_PORT
           value: "3000"
         - name: DB_HOST
           value: postgres
