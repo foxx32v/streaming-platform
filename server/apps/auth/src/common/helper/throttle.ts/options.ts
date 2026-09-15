@@ -8,21 +8,21 @@ export const throttleRegisterOptions = {
 }
 
 export const throttleLoginOptions = {
-    default: { 
+    default: {
         limit: LOGIN_LIMITER.COUNT, 
         ttl: LOGIN_LIMITER.TIMEOUT 
     }
 }
 
 export const throttleAdminOptions = {
-    default: { 
+    default: {
         limit: ADMIN_LIMITER.COUNT, 
         ttl: ADMIN_LIMITER.TIMEOUT 
     }
 }
 
 export const throttleGlobalOptions = {
-    default: { 
+    default: {
         limit: GLOBAL_LIMITER.COUNT, 
         ttl: GLOBAL_LIMITER.TIMEOUT 
     }

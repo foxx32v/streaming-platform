@@ -2,7 +2,37 @@ import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
-  getHello(): string {
-    return 'Hello World!';
-  }
+  getMe() {}
+
+  updateMe() {}
+
+  deleteMe() {}
+
+  getUser() {}
+
+  uploadAvatar() {}
+
+  deleteAvatar() {}
+
+  followUser() {}
+
+  unfollowUser() {}
+
+  getFollowers() {}
+
+  getFollowing() {}
+
+  getStats() {}
+
+  getSettings() {}
+
+  updateSettings() {}
+
+  searchUsers() {}
+
+  getAllUsers() {}
+
+  banUser() {}
+
+  unbanUser() {}
 }

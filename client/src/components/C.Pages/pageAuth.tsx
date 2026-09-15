@@ -49,11 +49,11 @@ export const PageAuth = () => {
     }
 
     return (
-        <div className="pageAuth">
+        <div className="mainPage">
             {!isAuth && <HeaderAuth/>}
             {renderPage()}
-            {isAuth && <NavigationSidebar/>}
             {!isAuth && <FooterAuth/>}
+            {isAuth && <NavigationSidebar/>}
         </div>
     )
 }

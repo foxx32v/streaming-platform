@@ -7,6 +7,7 @@ export { Loader } from './A.Ui/loader';
 export { ButtonSetState } from './A.Ui/buttonSetState';
 export { Logo } from './A.Ui/logo';
 export { ButtonSwitchTheme } from './/A.Ui/buttonSwitchTheme';
+export { VideoElement } from './A.Ui/videoElement';
 // B //
 export { RegisterForm } from './B.Widgets/registerForm'
 export { LoginForm } from './B.Widgets/loginForm';

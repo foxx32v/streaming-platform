@@ -5,10 +5,10 @@ import { authGuard } from './common/helper/guards/auth.guard';
 import { adminGuard } from './common/helper/guards/admin.guard';
 import { Throttle } from '@nestjs/throttler';
 import { throttleLoginOptions, throttleRegisterOptions, throttleAdminOptions, throttleGlobalOptions } from './common/helper/throttle.ts/options';
-import { UUID } from 'crypto';
 import { githubGuard, googleGuard} from './common/helper/guards';
-import { OAuthUserDto, ResType, TokensType } from './common/helper/types/helperTypes';
+import { OAuthUserDto } from './common/helper/types/helperTypes';
 import { ACCESS_TOKEN, REFRESH_TOKEN } from './common/config/auth/jwt.config';
+import { Public } from './common/decorators';
 
 @Controller('auth')
 export class AuthController {
@@ -17,6 +17,7 @@ export class AuthController {
 // Auth
 
   @Post('register')
+  @Public()
   @Throttle(throttleRegisterOptions)
   @HttpCode(HttpStatus.CREATED)
   register(@Body() dto: RegisterDto, @Ip() ip: string) {
@@ -24,6 +25,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @Public()
   @Throttle(throttleLoginOptions)
   @HttpCode(HttpStatus.OK)
   login(@Body() dto: LoginDto, @Ip() ip: string, @Headers('user-agent') userAgent: string) {
@@ -38,18 +40,21 @@ export class AuthController {
   }
 
   @Post('refresh')
+  @Public()
   @HttpCode(HttpStatus.OK)
   refresh(@Body() dto: RefreshDto, @Ip() ip: string) {
     return this.authService.refresh(dto, ip);
   }
 
   @Post('verify-email')
+  @Public()
   @HttpCode(HttpStatus.OK)
   verifyEmail(@Body() dto: VerifyEmailDto) {
     return this.authService.verifyEmail(dto);
   }
 
   @Post('resend-verification')
+  @Public()
   @Throttle(throttleGlobalOptions)
   @HttpCode(HttpStatus.OK)
   resendVerification(@Body() dto: EmailDto) {
@@ -59,6 +64,7 @@ export class AuthController {
 // Password recovery
 
   @Post('forget-password')
+  @Public()
   @Throttle(throttleGlobalOptions)
   @HttpCode(HttpStatus.OK)
   forgotPassword(@Body() dto: ForgetPasswordDto) {
@@ -66,6 +72,7 @@ export class AuthController {
   }
 
   @Post('reset-password')
+  @Public()
   @HttpCode(HttpStatus.OK)
   resetPassword(@Body() dto: ResetPasswordDto) {
     return this.authService.resetPassword(dto);
@@ -81,10 +88,12 @@ export class AuthController {
 // OAuth login
 
   @Get('google')
+  @Public()
   @UseGuards(googleGuard)
   googleLogin() {}
 
   @Get('google/callback')
+  @Public()
   @UseGuards(googleGuard)
   async googleCallback(@Req() req: any, @Res() res: any) {
     const user = (req as any).user as OAuthUserDto
@@ -95,10 +104,12 @@ export class AuthController {
   }
 
   @Get('github')
+  @Public()
   @UseGuards(githubGuard)
   githubLogin() {}
 
   @Get('github/callback')
+  @Public()
   @UseGuards(githubGuard)
   async githubCallback(@Req() req: any, @Res() res: any) {
     const user = (req as any).user as OAuthUserDto
@@ -169,12 +180,14 @@ export class AuthController {
 // Tokens
 
   @Post('verify')
+  @Public()
   @HttpCode(HttpStatus.OK)
   verifyToken(@Body() dto: TokenDto) {
     return this.authService.verifyToken(dto.token);
   }
 
   @Post('validate')
+  @Public()
   @HttpCode(HttpStatus.OK)
   validateToken(@Body() dto: TokenDto) {
     return this.authService.validateToken(dto.token);

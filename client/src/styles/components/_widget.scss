@@ -1,4 +1,4 @@
-@import '../core/variables';
+@use '../core/variables';
 
 .formRegistration, .formLogin, .cardVerifyEmail,
 .logoutForm, .forgetEmailForm, .forgetPasswordForm {
@@ -250,7 +250,8 @@
             border-radius: 4px;
             transition: background 0.2s;
             &:hover {
-                background: var(--theme_hover);
+                z-index: 100;
+                background: var(--theme_card-bg);
             }}} .sidebarNav {
         display: flex;
         flex-direction: column;
@@ -300,6 +301,7 @@
             border-radius: 4px;
             transition: background 0.2s;
             &:hover {
+                z-index: 100;
                 background: var(--theme_hover);
             }}} .sidebarNav {
         display: flex;
@@ -314,3 +316,11 @@
         padding-top: 16px;
         border-top: 1px solid var(--theme_border_color);
 }}
+
+.FeedPage {
+    display: flex;
+    width: 100%;
+    height: 90vh;
+    overflow-y: scroll;
+    background: var(--theme_bg_card);
+}

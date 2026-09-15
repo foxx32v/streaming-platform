@@ -1,0 +1,4 @@
+export const JWT_CONFIG = {
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_SECRET,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_SECRET,
+}

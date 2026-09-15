@@ -1,7 +1,9 @@
+import { VideoElement } from "../"
+
 export const FeedPage = () => {
     return (
-        <div>
-            
+        <div className="FeedPage">
+            <VideoElement/>
         </div>
     )
 }
