@@ -23,15 +23,15 @@ spec:
         env:
         - name: AUTH_PORT
           value: "3000"
-        - name: DB_HOST
+        - name: DB_AUTH_HOST
           value: postgres
-        - name: DB_PORT
+        - name: DB_AUTH_PORT
           value: "5432"
-        - name: DB_NAME
+        - name: DB_AUTH_NAME
           value: auth
-        - name: DB_USER
+        - name: DB_AUTH_USER
           value: postgres
-        - name: DB_PASS
+        - name: DB_AUTH_PASS
           valueFrom:
             secretKeyRef:
               name: db-secret

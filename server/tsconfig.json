@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "resolvePackageJsonExports": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolvePackageJsonExports": false,
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,
@@ -18,6 +18,11 @@
     "forceConsistentCasingInFileNames": true,
     "noImplicitAny": false,
     "strictBindCallApply": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "baseUrl": "./",
+    "paths": {
+      "@app/kafka": ["libs/kafka/src"],
+      "@app/kafka/*": ["libs/kafka/src/*"]
+    }
   }
 }

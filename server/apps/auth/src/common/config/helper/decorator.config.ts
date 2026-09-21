@@ -5,7 +5,7 @@ export const PASSWORD_DECORATOR = {
     MESSAGE: 'Password must contain uppercase letter, lowercase letter, and a special character or number',
 }
 
-export const USERNAME_DECORATOR = {
+export const USERNAME_DECORATOR_CONFIG = {
     MIN_LENGTH: 4,
     MAX_LENGTH: 50,
     REGULAR: /^[a-zA-Z0-9_]+$/,

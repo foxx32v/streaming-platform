@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user
+  namespace: perepihotic
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user
+  template:
+    metadata:
+      labels:
+        app: user
+    spec:
+      enableServiceLinks: false
+      containers:
+      - name: user
+        image: perepihoticwatch/user:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3004
+        env:
+        - name: USER_PORT
+          value: "3004"
+        - name: DB_USER_HOST
+          value: postgres
+        - name: DB_USER_PORT
+          value: "5432"
+        - name: DB_USER_NAME
+          value: user
+        - name: DB_USER_USER
+          value: postgres
+        - name: DB_USER_PASS
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: REFRESH_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: refresh-secret
+        - name: ACCESS_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: secret
+        - name: GATEWAY_URL
+          valueFrom:
+            secretKeyRef:
+              name: app-secret
+              key: gateway-url

@@ -25,7 +25,7 @@ export const RegisterForm = () => {
         <form onSubmit={handleSubmit(onSubmit)} className='formRegistration'>
             <h2>Registration</h2>
             <FormInput name='email' label='Email' register={register} error={errors.email} />
-            <FormInput name='userName' label='Username' register={register} error={errors.userName} />
+            <FormInput name='userName' label='UserName' register={register}/>
             <FormInput name='password' label='Password' type='password' register={register} error={errors.password} />
             <FormInput name='doublePassword' label='Confirm Password' type='password' register={register} error={errors.doublePassword} />
             <button onClick={() => setPage('login')} className='link'>I have account</button>

@@ -1,4 +1,3 @@
-// server/apps/auth/src/common/helper/db/dbInit.ts
 import { db } from './db';
 
 export const DbInit = async () => {
@@ -7,7 +6,6 @@ export const DbInit = async () => {
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             email VARCHAR(255) UNIQUE NOT NULL,
             passwordHash VARCHAR(255) NOT NULL,
-            userName VARCHAR(50) UNIQUE NOT NULL,
             refreshToken VARCHAR(500),
             accessToken VARCHAR(500),
             role VARCHAR(50) DEFAULT 'user',

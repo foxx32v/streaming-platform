@@ -1,13 +1,13 @@
 import { IsDateString, IsEmail, IsNotEmpty } from "class-validator";
-import { IsPassword } from "../../decorators/password.decorator";
-import { IsUserName } from "../../decorators/userName.decorator";
+import { IsPassword, IsUserName } from "../../decorators";
 
 export class RegisterDto {
+    @IsNotEmpty()
+    @IsUserName()
+    'userName': string;
     @IsEmail()
     @IsNotEmpty()
     'email': string;
-    @IsUserName()
-    'userName': string;
     @IsDateString()
     'birthDate': string;
     @IsPassword()

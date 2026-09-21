@@ -18,15 +18,15 @@ export const PageAuth = () => {
     }, [token, tokenPass, setPage])
 
     useEffect(() => {
-        if (isAuth) setPage('feed')
-    }, [isAuth])
-
-    useEffect(() => {
         const protectedPages = ['profile', 'trending', 'categories', 'subscriptions', 'library', 'history', 'watchLater', 'live', 'settings']
         if (!isAuth && protectedPages.includes(currentPage)) {
             setPage('login')
         }
     }, [isAuth, currentPage, setPage])
+
+    useEffect(() => {
+        if (isAuth) setPage('feed')
+    }, [isAuth])
 
     const renderPage = () => {
     switch (currentPage) {
@@ -44,7 +44,7 @@ export const PageAuth = () => {
         case 'resetEmail': return <ResetEmailForm/>
         case 'forgetPassword': return <ForgetPasswordForm/>
         case 'forgetPasswordStageTwo': return <ForgetPasswordStageTwo/>
-        default: return <HomePage />
+        default: return <FeedPage />
         }
     }
 

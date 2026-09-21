@@ -22,7 +22,6 @@ class AuthApi {
     async RevokeAllSessions() {return AxiosDelete<IResponse>(`${PATH_API.auth}/sessions`, true)}
     async VerifyToken(token: string) {return AxiosPost<IResponse<IVerifyTokenResponse>>(`${PATH_API.auth}/verify`, { token })}
     async ValidateToken(token: string) {return AxiosPost<IResponse<IValidateTokenResponse>>(`${PATH_API.auth}/validate`, { token })}
-    
     async GoogleLogin() {window.location.href = `${GLOBAL_API.serverUrl}${PATH_API.auth}/google`}
     async GithubLogin() {window.location.href = `${GLOBAL_API.serverUrl}${PATH_API.auth}/github`}
 }

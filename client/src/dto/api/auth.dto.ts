@@ -1,6 +1,6 @@
 export interface IRegistration {
-    email: string;
     userName: string;
+    email: string;
     password: string;
     doublePassword: string;
 }

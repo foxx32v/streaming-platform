@@ -1,16 +1,13 @@
 import { IsDate, IsEmail, IsNotEmpty, IsUUID } from "class-validator";
 import { IsUserName } from "../../urils";
 
-export class UserDto {
+export class UserProfileDto {
     @IsUUID()
     'id': string
-    @IsEmail()
-    @IsNotEmpty()
-    'email': string
     @IsNotEmpty()
     @IsUserName()
     'userName': string
-    'role': string
+    'role': 'user' | 'admin'
     'avatarColor': string
     'isBlocked': boolean
     'status': string

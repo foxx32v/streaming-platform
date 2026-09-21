@@ -5,8 +5,8 @@ import { Reflector } from '@nestjs/core';
 export class AdminGuard implements CanActivate {
     constructor(private reflector: Reflector) {}
     canActivate(context: ExecutionContext): boolean {
-        const request = context.switchToHttp().getRequest();
-        const user = request.user;
+        const req = context.switchToHttp().getRequest();
+        const user = req.user;
         if (!user) throw new UnauthorizedException('User not authenticated');
         if (user.role !== 'admin') throw new ForbiddenException('Access denied. Admin only.');
         return true;

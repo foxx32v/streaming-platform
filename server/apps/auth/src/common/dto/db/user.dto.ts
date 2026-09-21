@@ -1,5 +1,5 @@
 import { IsEmail, isNotEmpty, IsNotEmpty, IsUUID } from "class-validator";
-import { IsPassword, IsUserName } from "../../decorators/";
+import { IsPassword } from "../../decorators/";
 
 export class UserDto {
     'id': string
@@ -9,7 +9,6 @@ export class UserDto {
     @IsPassword()
     'password': string
     @IsNotEmpty()
-    @IsUserName()
     'userName': string
     'refreshToken': string
     'accessToken': string

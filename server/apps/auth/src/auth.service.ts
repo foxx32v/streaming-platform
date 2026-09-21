@@ -9,19 +9,24 @@ import * as bcrypt from 'bcrypt';
 import { jwtService } from './common/helper/jwt/jwt.helper';
 import sessionsRepository from './common/repository/sessions.repository';
 import { REFRESH_TOKEN } from './common/config/auth/jwt.config';
-import { TokensType } from './common/helper/types/helperTypes';
+import { PayloadType, TokensType } from './common/helper/types/helperTypes';
+import { Inject } from '@nestjs/common';
+import { KafkaService } from '@app/kafka';
+
 @Injectable()
 export class AuthService {
+  constructor(
+    private readonly kafkaService: KafkaService,
+  ) {}
   async register(dto: RegisterDto, ip: string) {
     if (dto.password !== dto.doublePassword) throw new HttpException('Passwords do not match', 400)
     const isUserByEmail = await userRepository.ExistsByEmail(dto.email)
     if (isUserByEmail) throw new HttpException('Email already exists', 409)
-    const isUserByUserName = await userRepository.ExistsByUserName(dto.userName)
-    if (isUserByUserName) throw new HttpException('Username already exists', 409)
     const linkActivation = crypto.randomUUID()
     const passwordHash = await bcrypt.hash(dto.password, 10)
     const avatarColor = GetRandomColor()
-    await userRepository.CreateUser(dto.email, passwordHash, dto.userName, linkActivation, avatarColor)
+    const userId = await userRepository.CreateUser(dto.email, passwordHash, linkActivation, avatarColor)
+    this.kafkaService.emitUserCreated({userId: userId, userName: dto.userName})
     await mailer.sendVerificationEmail(dto.email, linkActivation)
     return Responser(201, 'You have successfully registered. Check your email.', { email: dto.email })
   }
@@ -32,7 +37,7 @@ export class AuthService {
     const isMatchPassword = await bcrypt.compare(dto.password, user.passwordhash)
     if (!user.isactivate) throw new HttpException('Please verify your email before logging in', 403)
     if (!isMatchPassword) throw new HttpException('Invalid password', 401)
-    const payload = {id: user.id, email: user.email, role: user.role}
+    const payload = {userId: user.id, email: user.email, role: user.role}
     const tokens = jwtService.generateTokens(payload)
     await userRepository.UpdateTokens(user.id, tokens)
     const expiresAt = new Date(Date.now() + REFRESH_TOKEN.EXPIRES)
@@ -56,9 +61,9 @@ export class AuthService {
     } catch (error) {throw new HttpException('Invalid refresh token', 401)}
     const session = await sessionsRepository.GetSessionByRefreshToken(dto.refreshToken)
     if (!session) throw new HttpException('Session not found', 404)
-    const user = await userRepository.GetUserById(payload.id)
+    const user = await userRepository.GetUserById(payload.userId)
     if (!user) throw new HttpException('User not found', 404)
-    const tokens = jwtService.generateTokens({id: user.id, email: user.email, role: user.role})
+    const tokens = jwtService.generateTokens({userId: user.id, email: user.email, role: user.role})
     await userRepository.UpdateTokens(user.id, tokens)
     const expiresAt = new Date(Date.now() + REFRESH_TOKEN.EXPIRES)
     await sessionsRepository.CreateSession(user.id, tokens.refreshToken, session.userAgent || 'unknown', ip, expiresAt)
@@ -123,12 +128,11 @@ export class AuthService {
   private async handleOAuthLogin(profile: any, provider: string, userAgent: string, ip: string): Promise<TokensType> {
     let user = await userRepository.GetUserByEmail(profile.email)
     if (!user) {
-        const userName = profile.username || profile.email.split('@')[0]
         const passwordHash = await bcrypt.hash(crypto.randomUUID(), 10)
         const avatarColor = GetRandomColor()
-        user = await userRepository.CreateUserOAuth(profile.email, passwordHash, userName, provider, profile.picture || null, avatarColor)
+        user = await userRepository.CreateUserOAuth(profile.email, passwordHash, provider, profile.picture || null, avatarColor)
     }
-    const payload = { id: user.id, email: user.email, role: user.role }
+    const payload = { userId: user.id, email: user.email, role: user.role }
     const tokens: TokensType = jwtService.generateTokens(payload)
     await userRepository.UpdateTokens(user.id, tokens)
     const expiresAt = new Date(Date.now() + REFRESH_TOKEN.EXPIRES)

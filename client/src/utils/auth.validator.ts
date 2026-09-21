@@ -4,8 +4,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AUTH_VALIDATOR_REGISTER, AUTH_VALIDATOR_LOGIN, AUTH_VALIDATOR_CHANGE_PASSWORD, AUTH_VALIDATOR_RESET_PASSWORD, AUTH_VALIDATOR_FORGET_PASSWORD, AUTH_VALIDATOR_VERIFY_EMAIL, AUTH_VALIDATOR_RESEND_VERIFICATION, AUTH_VALIDATOR_VERIFY_TOKEN, AUTH_VALIDATOR_VALIDATE_TOKEN, AUTH_VALIDATOR_CHANGE_USER_ROLE, AUTH_VALIDATOR_BLOCK_USER, AUTH_VALIDATOR_GET_USER_BY_ID, AUTH_VALIDATOR_REVOKE_SESSION} from "../configs";
 
 export const RegisterSchema = z.object({
+    'userName': z.string().min(AUTH_VALIDATOR_REGISTER.userNameMin, { message: AUTH_VALIDATOR_REGISTER.userNameMessage }).max(AUTH_VALIDATOR_REGISTER.userNameMax, { message: AUTH_VALIDATOR_REGISTER.userNameMessage }).regex(/^[a-zA-Z0-9_]+$/, { message: AUTH_VALIDATOR_REGISTER.userNameMessage }),
     'email': z.string().email(AUTH_VALIDATOR_REGISTER.emailMessage),
-    'userName': z.string().min(AUTH_VALIDATOR_REGISTER.userNameMin, AUTH_VALIDATOR_REGISTER.userNameMessage).max(AUTH_VALIDATOR_REGISTER.userNameMax, AUTH_VALIDATOR_REGISTER.userNameMessage),
     'password': z.string().min(AUTH_VALIDATOR_REGISTER.passwordMin, AUTH_VALIDATOR_REGISTER.passwordMessage).max(AUTH_VALIDATOR_REGISTER.passwordMax, AUTH_VALIDATOR_REGISTER.passwordMessage),
     'doublePassword': z.string().min(AUTH_VALIDATOR_REGISTER.passwordMin, AUTH_VALIDATOR_REGISTER.passwordMessage).max(AUTH_VALIDATOR_REGISTER.passwordMax, AUTH_VALIDATOR_REGISTER.passwordMessage),
     }).refine((data) => data.password === data.doublePassword, {

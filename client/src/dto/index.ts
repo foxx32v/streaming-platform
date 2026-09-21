@@ -4,6 +4,7 @@ export * from './entities/session.dto';
 
 // API //
 export * from './api/auth.dto';
+export * from './api/userProfile.dto'
 export * from './api/response.dto';
 export * from './api/apiError.dto';
 export * from './api/authResponse';

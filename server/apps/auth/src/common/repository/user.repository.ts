@@ -2,12 +2,13 @@ import { db } from "../helper/db/db";
 import { TokensType } from "../helper/types/helperTypes";
 
 class UserRepository {
-    async CreateUser(email: string, passwordHash: string, userName: string, linkActivate: string, avatarColor: string) {
-        await db.query(`
-            INSERT INTO users
-            (email, passwordHash, userName, linkactivate, avatarColor)
-            VALUES($1,$2,$3,$4,$5)`,
-        [email, passwordHash, userName, linkActivate, avatarColor]);
+    async CreateUser(email: string, passwordHash: string, linkActivate: string, avatarColor: string): Promise<string> {
+        const result = await db.query(`
+            INSERT INTO users (email, passwordHash, linkActivate, avatarColor)
+            VALUES ($1, $2, $3, $4)
+            RETURNING id
+        `, [email, passwordHash, linkActivate, avatarColor]);
+        return result.rows[0].id;
     }
 
     async ResetEmail(id: string, email: string) {
@@ -42,14 +43,6 @@ class UserRepository {
         return user.rows[0]
     }
 
-    async GetUserByUserName(userName: string) {
-        const user = await db.query(`
-            SELECT * FROM users
-            WHERE userName = $1`,
-        [userName])
-        return user.rows[0]
-    }
-
     async GetUserByLinkActivate(linkActivation: string) {
         const user = await db.query(`
             SELECT * FROM users
@@ -70,13 +63,6 @@ class UserRepository {
         const result = await db.query(`
             SELECT EXISTS(SELECT 1 FROM users WHERE email = $1)`,
         [email])
-        return result.rows[0].exists
-    }
-
-    async ExistsByUserName(userName: string) {
-        const result = await db.query(`
-            SELECT EXISTS(SELECT 1 FROM users WHERE userName = $1)`,
-        [userName])
         return result.rows[0].exists
     }
 
@@ -132,7 +118,7 @@ class UserRepository {
     async GetAllUsers(page: number, limit: number) {
         const offset = (page - 1) * limit
         const users = await db.query(`
-            SELECT id, email, userName, role, isBlocked, isActivate, lastSeenAt, createdAt
+            SELECT id, email, role, isBlocked, isActivate, lastSeenAt, createdAt
             FROM users
             ORDER BY createdAt DESC
             LIMIT $1 OFFSET $2`,
@@ -201,13 +187,13 @@ class UserRepository {
         [id, reason])
     }
 
-    async CreateUserOAuth(email: string, passwordHash: string, userName: string, provider: string, avatar: string, avatarColor: string) {
+    async CreateUserOAuth(email: string, passwordHash: string, provider: string, avatar: string, avatarColor: string) {
         const result = await db.query(`
             INSERT INTO users
-            (email, passwordHash, userName, provider, avatar, avatarColor, isActivate)
-            VALUES($1, $2, $3, $4, $5, $6, true)
-            RETURNING id, email, userName, role, isActivate`,
-        [email, passwordHash, userName, provider, avatar, avatarColor]);
+            (email, passwordHash, provider, avatar, avatarColor, isActivate)
+            VALUES($1, $2, $3, $4, $5, true)
+            RETURNING id, email, role, isActivate`,
+        [email, passwordHash, provider, avatar, avatarColor]);
         return result.rows[0];
     }
 }

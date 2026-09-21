@@ -11,7 +11,6 @@ export class ApiGatewayService {
     else if (targetUrl.startsWith('/stream')) serviceUrl= `${URL_CONFIG.STREAM}`
     else return Responser(404, 'Service not found.')
     const finalUrl = serviceUrl + targetUrl
-    console.log(method,finalUrl)
     const res = await AxiosRequest(finalUrl, method, body, headers, query)
     return Responser(res.statusCode, res.message, res.data, res.errors)
   }

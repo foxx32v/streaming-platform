@@ -7,13 +7,14 @@ import { ThrottlerModule } from '@nestjs/throttler';
 import { authGuard } from './common/helper/guards/auth.guard';
 import { adminGuard } from './common/helper/guards/admin.guard';
 import { GLOBAL_LIMITER } from './common/config/auth/rateLimiter.config';
-import { resolve } from 'path';
 import { ACCESS_TOKEN } from './common/config/auth/jwt.config';
 import { GoogleStrategy, GithubStrategy } from './common/helper/strategies/';
 import { googleGuard, githubGuard } from './common/helper/guards/';
+import { KafkaModule } from '@app/kafka';
 
 @Module({
   imports: [
+    KafkaModule,
     ConfigModule.forRoot({
       envFilePath: '.env',
     }),

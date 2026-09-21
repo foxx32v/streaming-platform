@@ -22,7 +22,7 @@ export const LoginForm = () => {
         SetCookie('refreshToken', refreshToken, 7)
         }
         setAuth(true)
-        setPage('feed')
+        setPage('profile')
     }
 
     const SendGoogleLogin = async () => {

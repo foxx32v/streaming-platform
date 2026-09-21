@@ -2,7 +2,6 @@ export interface userDto {
     id: string
     email: string
     password: string
-    userName: string
     refreshToken: string
     accessToken: string
     role: string

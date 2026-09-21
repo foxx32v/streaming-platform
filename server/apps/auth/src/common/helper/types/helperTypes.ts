@@ -31,3 +31,9 @@ export type ResType = {
     redirect: (url: string) => void,
     send: (data: any) => void,
 }
+
+export interface PayloadType {
+    userId: string;
+    email: string;
+    role: 'user'|'admin'
+}

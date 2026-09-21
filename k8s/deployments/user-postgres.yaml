@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-postgres
+  namespace: perepihotic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: user-postgres
+  template:
+    metadata:
+      labels:
+        app: user-postgres
+    spec:
+      containers:
+      - name: user-postgres
+        image: postgres:15
+        env:
+        - name: POSTGRES_USER
+          value: postgres
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: password
+        - name: POSTGRES_DB
+          value: user
+        ports:
+        - containerPort: 5432
+        volumeMounts:
+        - name: user-postgres-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: user-postgres-data
+        persistentVolumeClaim:
+          claimName: user-postgres-pvc
